@@ -20,14 +20,14 @@ namespace preCalc
                     toContinue = false;
                 }
                 else Console.ForegroundColor = ConsoleColor.White;
-                }
+            }
         }
-       
+
         private static bool MainMenu()
         {
             Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Type in a number and confirm it with ENTER key:\n"); 
+            Console.WriteLine("Type in a number and confirm it with ENTER key:\n");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("1) Calculator SUM");
             Console.WriteLine("2) Calculator SUBSCTRACT");
@@ -72,10 +72,9 @@ namespace preCalc
             var number = Console.ReadLine();
             while (!isValidNumber(number))
             {
-                number = Console.ReadLine(); 
+                number = Console.ReadLine();
             }
             a = double.Parse(number);
-            //else continue;//добавить доп запрос на повторный инпут
             return a;
         }
         static double inputNumber2()
@@ -88,11 +87,8 @@ namespace preCalc
                 number = Console.ReadLine();
             }
             b = double.Parse(number);
-            //else continue;//добавить доп запрос на повторный инпут
-            // Console.WriteLine("b={0}", b);
             return b;
-        }  
-
+        }
         static double CalculatorSum()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -136,30 +132,50 @@ namespace preCalc
         static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
             double temp2;
-                while (!double.TryParse(input, out temp2))
-                {
+            while (!double.TryParse(input, out temp2))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("input needs to be a number, try again");
+                Console.ForegroundColor = ConsoleColor.Green;
                 //input = Console.ReadLine();
                 return false;
-                }
+            }
+            Console.ForegroundColor = ConsoleColor.Green;
             return true;
-
         }
-        
+
         static bool matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            int[,] matrix1 = new int[2,2];
-            int[,] matrix2 = new int[2,2];
-            int[,] matrixMultiplyResult = new int[2,2];
-            int n = 2;  //predefined setting of matrix row and columns size
+            string number; // Needed to work with isValidNumberMethod;
+            Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly numbers >0 are allowed"); 
+            // to add validation on <=0
+            string presize = Console.ReadLine();
+            while (!isValidNumber(presize))
+            {
+                presize = Console.ReadLine();
+            }
+            int n = Convert.ToInt32(presize);
+            //Console displays the size of matrix;
+
+            int[,] matrix1 = new int[n, n];
+            int[,] matrix2 = new int[n, n];
+            int[,] matrixMultiplyResult = new int[n, n];
+            
             Console.Write("Enter elements of the first matrix, separated by ENTER\n");
             Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    matrix1[i, j] = Convert.ToInt32(Console.ReadLine());
+                    //matrix1[i, j] = Convert.ToInt32(Console.ReadLine());
+                    number = Console.ReadLine();
+                    while (!isValidNumber(number))
+                    {
+                        number = Console.ReadLine();
+                    }
+                    matrix1[i, j] = Convert.ToInt32(number);
+
                 }
             }
             Console.Write("Enter elements of the second matrix, separated by ENTER:\n");
@@ -168,7 +184,13 @@ namespace preCalc
             {
                 for (int j = 0; j < n; j++)
                 {
-                    matrix2[i, j] = Convert.ToInt32(Console.ReadLine());
+                    number = Console.ReadLine();
+                    while (!isValidNumber(number))
+                    {
+                        number = Console.ReadLine();
+                        //matrix1[i, j] = number;
+                    }
+                    matrix2[i, j] = Convert.ToInt32(number);
                 }
             }
             Console.Write("\nFirst matrix is:");
@@ -190,7 +212,7 @@ namespace preCalc
                     matrixMultiplyResult[i, j] = matrix1[i, j] * matrix2[i, j];
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write("\nResult of matrix multiplication: \n");
-            for (int i= 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 Console.Write("\n");
                 for (int j = 0; j < n; j++)
