@@ -14,60 +14,85 @@ namespace preCalc
             while (toContinue)// = while (toCont==true)
             {
                 MainMenu();
-                Console.WriteLine("Press 'y' to continue or any other key to exit");
+                Console.WriteLine("Press 'y' to return to the menu or any other key to exit");
                 if (Console.ReadLine() != "y")
                 {
                     toContinue = false;
                 }
                 else Console.ForegroundColor = ConsoleColor.White;
-
+                }
+        }
+       
+        private static bool MainMenu()
+        {
+            Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("Type in a number and confirm it with ENTER key:\n"); 
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("1) Calculator SUM");
+            Console.WriteLine("2) Calculator SUBSCTRACT");
+            Console.WriteLine("3) Calculator MULTIPLY");
+            Console.WriteLine("4) Calculator DIVISION");
+            Console.WriteLine("5) Matrix multiplication");
+            string result = Console.ReadLine();
+            if (result == "1")
+            {
+                CalculatorSum();
+                return true;
+            }
+            else if (result == "2")
+            {
+                CalculatorSubstract();
+                return true;
+            }
+            else if (result == "3")
+            {
+                CalculatorMultiply();
+                return true;
+            }
+            else if (result == "4")
+            {
+                CalculatorDivision();
+                return true;
+            }
+            else if (result == "5")
+            {
+                matrixMultiply();
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
-        /*static (double, double) inputNumbers() {
-            double a=0,b = 0;
-            Console.WriteLine("Input A");
-            var number = Console.ReadLine();
-            if (isValidNumber(number))
-            {
-                a = int.Parse(number);
-            }
-            //else continue;//добавить доп запрос на повторный инпут
-            Console.WriteLine("a={0}", a);
-            Console.WriteLine("Input B");
-            number = Console.ReadLine();
-            if (isValidNumber(number))
-            {
-                b = int.Parse(number);
-            } //else continue;//добавить доп запрос на повторный инпут
-            Console.WriteLine("b={0}", b);
-            return (a,b);
-        }*/  //получение двух переменных.,
         static double inputNumber1()
         {
             double a = 0;
-            Console.WriteLine("Input A");
+            Console.WriteLine("Input A, positive number, decimals and 0 are allowed");
             var number = Console.ReadLine();
-            if (isValidNumber(number))
+            while (!isValidNumber(number))
             {
-                a = int.Parse(number);
+                number = Console.ReadLine(); 
             }
+            a = double.Parse(number);
             //else continue;//добавить доп запрос на повторный инпут
-            //Console.WriteLine("a={0}", a);
             return a;
         }
         static double inputNumber2()
         {
             double b = 0;
-            Console.WriteLine("Input B");
+            Console.WriteLine("Input B, positive number, decimals and 0 are allowed");
             var number = Console.ReadLine();
-            if (isValidNumber(number))
+            while (!isValidNumber(number))
             {
-                b = int.Parse(number);
+                number = Console.ReadLine();
             }
+            b = double.Parse(number);
             //else continue;//добавить доп запрос на повторный инпут
-           // Console.WriteLine("b={0}", b);
+            // Console.WriteLine("b={0}", b);
             return b;
-        }
+        }  
+
         static double CalculatorSum()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -108,97 +133,72 @@ namespace preCalc
             Console.WriteLine("{0}/{1}={2}", a, b, result);
             return result;
         }
-        static bool isValidNumber(string input) // = if (!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
+        static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
-            if (!int.TryParse(input, out int result))
-            {
-                Console.WriteLine("input needs to be a whole number");
+            double temp2;
+                while (!double.TryParse(input, out temp2))
+                {
+                Console.WriteLine("input needs to be a number, try again");
+                //input = Console.ReadLine();
                 return false;
-            }
-            else if (result < 0)
-            {
-                Console.WriteLine("input needs to be a positive or 0");
-                return false;
-            }
-            else return true;
+                }
+            return true;
+
         }
-        private static bool MainMenu()
+        
+        static bool matrixMultiply()
         {
-            Console.WriteLine("Choose an option:");
-            Console.WriteLine("1) Calculator SUM");
-            Console.WriteLine("2) Calculator SUBSCTRACT");
-            Console.WriteLine("3) Calculator MULTIPLY");
-            Console.WriteLine("4) Calculator DIVISION");
-            Console.WriteLine("5) Matrix sum");
-            string result = Console.ReadLine();
-            if (result == "1")
+            Console.ForegroundColor = ConsoleColor.Green;
+            int[,] matrix1 = new int[2,2];
+            int[,] matrix2 = new int[2,2];
+            int[,] matrixMultiplyResult = new int[2,2];
+            int n = 2;  //predefined setting of matrix row and columns size
+            Console.Write("Enter elements of the first matrix, separated by ENTER\n");
+            Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
+            for (int i = 0; i < n; i++)
             {
-                CalculatorSum();
-                return true;
+                for (int j = 0; j < n; j++)
+                {
+                    matrix1[i, j] = Convert.ToInt32(Console.ReadLine());
+                }
             }
-            else if (result == "2")
+            Console.Write("Enter elements of the second matrix, separated by ENTER:\n");
+            Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
+            for (int i = 0; i < n; i++)
             {
-                CalculatorSubstract();
-                return true;
+                for (int j = 0; j < n; j++)
+                {
+                    matrix2[i, j] = Convert.ToInt32(Console.ReadLine());
+                }
             }
-            else if (result == "3")
+            Console.Write("\nFirst matrix is:");
+            for (int i = 0; i < n; i++)
             {
-                CalculatorMultiply();
-                return true;
+                Console.Write("\n");
+                for (int j = 0; j < n; j++)
+                    Console.Write("{0}\t", matrix1[i, j]);
             }
-            else if (result == "4")
+            Console.Write("\nSecond matrix is:");
+            for (int i = 0; i < n; i++)
             {
-                CalculatorDivision();
-                return true;
+                Console.Write("\n");
+                for (int j = 0; j < n; j++)
+                    Console.Write("{0}\t", matrix2[i, j]);
             }
-            else if (result == "5")
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    matrixMultiplyResult[i, j] = matrix1[i, j] * matrix2[i, j];
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("\nResult of matrix multiplication: \n");
+            for (int i= 0; i < n; i++)
             {
-                //CalculatorMatrix();
-                return true;
+                Console.Write("\n");
+                for (int j = 0; j < n; j++)
+                    Console.Write("{0}\t", matrixMultiplyResult[i, j]);
             }
-            else
-            {
-                return false;
-            }
+            Console.Write("\n\n");
+            return true;
         }
-        /* static int Result(int a, int b, string input)
-         {
-             if (input == "+")
-             {
-                 return a + b;
-             }
-             else if (input == "-")
-             {
-                 return a - b;
-             }
-             else if (input == "*")
-             {
-                 return a * b;
-             }
-             else if (input == "/")
-             {
-                 return a / b;
-             }
-             else return 0;
-             Console.WriteLine("operator not valid");
-             */
     }
 }
-/*   int[] matrix1 = new int[2];
-                  int[] matrix2 = new int[2];
-                  //заполнение Матрицы циклом
-                  for (int i = 0; i < matrix1.Length; i++)
-                  {
-                      Console.WriteLine("Input {0} element of the {1} matrix", i, matrix1);
-                      matrix1[i] = int.Parse(Console.ReadLine());
-                      //matrix1[i] = input;
-                  }
-                  Console.Write("Matrix 1 is:[");
-                  for (int i = 0; i < matrix1.Length; i++)
-                  {
-                      Console.Write("{0} ", matrix1[i]);
-                      //matrix1[i] = input;
-                  }
-                  Console.Write("]");
-                  //вывод заполненного массива1
-                 */
+
