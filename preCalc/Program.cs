@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 namespace preCalc
 {
     class Program
@@ -22,7 +18,6 @@ namespace preCalc
                 else Console.ForegroundColor = ConsoleColor.White;
             }
         }
-
         private static bool MainMenu()
         {
             Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
@@ -91,10 +86,12 @@ namespace preCalc
         }
         static double CalculatorSum()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("You've selected SUM operation");
             double a = inputNumber1();
+            Console.ForegroundColor = ConsoleColor.Magenta;
             double b = inputNumber2();
+            Console.ForegroundColor = ConsoleColor.Magenta;
             double result = a + b;
             Console.WriteLine("{0}+{1}={2}", a, b, result);
             return result;
@@ -104,7 +101,9 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("You've selected SUBSTRACT operation");
             double a = inputNumber1();
+            Console.ForegroundColor = ConsoleColor.Gray;
             double b = inputNumber2();
+            Console.ForegroundColor = ConsoleColor.Gray;
             double result = a - b;
             Console.WriteLine("{0}-{1}={2}", a, b, result);
             return result;
@@ -114,7 +113,9 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("You've selected MULTIPLY operation");
             double a = inputNumber1();
+            Console.ForegroundColor = ConsoleColor.Cyan;
             double b = inputNumber2();
+            Console.ForegroundColor = ConsoleColor.Cyan;
             double result = a * b;
             Console.WriteLine("{0}*{1}={2}", a, b, result);
             return result;
@@ -124,7 +125,9 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("You've selected DIVISION operation");
             double a = inputNumber1();
+            Console.ForegroundColor = ConsoleColor.Yellow;
             double b = inputNumber2();
+            Console.ForegroundColor = ConsoleColor.Yellow;
             double result = a / b;
             Console.WriteLine("{0}/{1}={2}", a, b, result);
             return result;
@@ -136,19 +139,17 @@ namespace preCalc
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("input needs to be a number, try again");
-                Console.ForegroundColor = ConsoleColor.Green;
                 //input = Console.ReadLine();
                 return false;
             }
-            Console.ForegroundColor = ConsoleColor.Green;
+            //Console.ForegroundColor = ConsoleColor.White;
             return true;
         }
-
         static bool matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             string number; // Needed to work with isValidNumberMethod;
-            Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly numbers >0 are allowed"); 
+            Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly numbers >0 are allowed");
             // to add validation on <=0
             string presize = Console.ReadLine();
             while (!isValidNumber(presize))
@@ -161,7 +162,7 @@ namespace preCalc
             int[,] matrix1 = new int[n, n];
             int[,] matrix2 = new int[n, n];
             int[,] matrixMultiplyResult = new int[n, n];
-            
+
             Console.Write("Enter elements of the first matrix, separated by ENTER\n");
             Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
             for (int i = 0; i < n; i++)
