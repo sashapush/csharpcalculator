@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace preCalc
 {
     class Program
@@ -22,7 +22,7 @@ namespace preCalc
         {
             Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Type in a number and confirm it with ENTER key:\n");
+            Console.WriteLine("Type in a number from 1 to 5 and confirm it with ENTER key:\n");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("1) Calculator SUM");
             Console.WriteLine("2) Calculator SUBSCTRACT");
@@ -63,7 +63,7 @@ namespace preCalc
         static double inputNumber1()
         {
             double a = 0;
-            Console.WriteLine("Input A, positive number, decimals and 0 are allowed");
+            Console.WriteLine("Input A, decimals and 0 are allowed");
             var number = Console.ReadLine();
             while (!isValidNumber(number))
             {
@@ -75,7 +75,7 @@ namespace preCalc
         static double inputNumber2()
         {
             double b = 0;
-            Console.WriteLine("Input B, positive number, decimals and 0 are allowed");
+            Console.WriteLine("Input B, decimals and 0 are allowed");
             var number = Console.ReadLine();
             while (!isValidNumber(number))
             {
@@ -224,4 +224,3 @@ namespace preCalc
         }
     }
 }
-
