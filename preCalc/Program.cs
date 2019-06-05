@@ -18,7 +18,7 @@ namespace preCalc
                 else Console.ForegroundColor = ConsoleColor.White;
             }
         }
-        private static bool MainMenu()
+        private static void MainMenu()
         {
             Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -33,36 +33,34 @@ namespace preCalc
             if (result == "1")
             {
                 CalculatorSum();
-                return true;
             }
             else if (result == "2")
             {
                 CalculatorSubstract();
-                return true;
             }
             else if (result == "3")
             {
                 CalculatorMultiply();
-                return true;
             }
             else if (result == "4")
             {
                 CalculatorDivision();
-                return true;
             }
             else if (result == "5")
             {
                 matrixMultiply();
-                return true;
             }
             else
             {
-                return false;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Please enter the numbers from 1 to 5");
+                MainMenu();
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
         static double inputNumber1()
         {
-            double a = 0;
+            double a;
             Console.WriteLine("Input A, decimals and 0 are allowed");
             var number = Console.ReadLine();
             while (!isValidNumber(number))
@@ -74,12 +72,30 @@ namespace preCalc
         }
         static double inputNumber2()
         {
-            double b = 0;
+            double b;
             Console.WriteLine("Input B, decimals and 0 are allowed");
             var number = Console.ReadLine();
             while (!isValidNumber(number))
             {
                 number = Console.ReadLine();
+            }
+            b = double.Parse(number);
+            return b;
+        }
+        static double inputNumber3()
+        {
+            double b;
+            Console.WriteLine("Input B, decimals are allowed");
+            var number = Console.ReadLine();
+            while (!isValidNumber(number) || double.Parse(number) == 0)
+            {
+                if (double.TryParse(number, out b))// && double.Parse(number) == 0)
+                {
+                    Console.WriteLine("Can't divide by 0,please provide other number");
+                    number = Console.ReadLine();
+                }
+                else
+                    number = Console.ReadLine();
             }
             b = double.Parse(number);
             return b;
@@ -126,12 +142,13 @@ namespace preCalc
             Console.WriteLine("You've selected DIVISION operation");
             double a = inputNumber1();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            double b = inputNumber2();
+            double b = inputNumber3();/////////////////////////////////////////////////////////
             Console.ForegroundColor = ConsoleColor.Yellow;
             double result = a / b;
             Console.WriteLine("{0}/{1}={2}", a, b, result);
             return result;
         }
+
         static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
             double temp2;
@@ -139,47 +156,65 @@ namespace preCalc
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("input needs to be a number, try again");
-                //input = Console.ReadLine();
                 return false;
             }
-            //Console.ForegroundColor = ConsoleColor.White;
             return true;
         }
+
+        static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
+        {
+            int temp2;
+            while (!int.TryParse(input, out temp2))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("input needs to be a whole number, try again");
+                return false;
+            }
+            return true;
+        }
+
         static bool matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             string number; // Needed to work with isValidNumberMethod;
-            Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly numbers >0 are allowed");
-            // to add validation on <=0
+            Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly whole numbers >0 are allowed");
             string presize = Console.ReadLine();
-            while (!isValidNumber(presize))
+            int x;  // Needed to work with int.TryParse
+            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)   // не оч красиво, но работает:)
             {
-                presize = Console.ReadLine();
+                if (int.TryParse(presize, out x))// && Convert.ToInt32(presize) <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Matrix Size can't be less or equal to 0");
+                    presize = Console.ReadLine();
+                }
+                else
+                    presize = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Green;
             }
             int n = Convert.ToInt32(presize);
-            //Console displays the size of matrix;
 
+            //Console displays the size of matrix;
             int[,] matrix1 = new int[n, n];
             int[,] matrix2 = new int[n, n];
             int[,] matrixMultiplyResult = new int[n, n];
-
-            Console.Write("Enter elements of the first matrix, separated by ENTER\n");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * n);
             Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    //matrix1[i, j] = Convert.ToInt32(Console.ReadLine());
                     number = Console.ReadLine();
                     while (!isValidNumber(number))
                     {
                         number = Console.ReadLine();
                     }
                     matrix1[i, j] = Convert.ToInt32(number);
-
+                    //possibly need additional validation on format (to prevent inserting double etc values);
                 }
             }
-            Console.Write("Enter elements of the second matrix, separated by ENTER:\n");
+            Console.Write("Enter {0} elements of the second matrix, separated by ENTER:\n", n * n);
             Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
             for (int i = 0; i < n; i++)
             {
@@ -189,7 +224,6 @@ namespace preCalc
                     while (!isValidNumber(number))
                     {
                         number = Console.ReadLine();
-                        //matrix1[i, j] = number;
                     }
                     matrix2[i, j] = Convert.ToInt32(number);
                 }
