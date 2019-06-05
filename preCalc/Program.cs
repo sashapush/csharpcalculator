@@ -10,7 +10,7 @@ namespace preCalc
             while (toContinue)// = while (toCont==true)
             {
                 MainMenu();
-                Console.WriteLine("Press 'y' to return to the menu or any other key to exit");
+                Console.WriteLine("Press 'y' to return to the menu or any other key to exit\n <C> Alexander Pushkaryov 2019");
                 if (Console.ReadLine() != "y")
                 {
                     toContinue = false;
@@ -50,12 +50,15 @@ namespace preCalc
             {
                 matrixMultiply();
             }
-            else
+            else 
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                /*Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Please enter the numbers from 1 to 5");
                 MainMenu();
                 Console.ForegroundColor = ConsoleColor.White;
+             To rework input validato   
+             */
+                
             }
         }
         static double inputNumber1()
@@ -180,7 +183,7 @@ namespace preCalc
             Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly whole numbers >0 are allowed");
             string presize = Console.ReadLine();
             int x;  // Needed to work with int.TryParse
-            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)   // не оч красиво, но работает:)
+            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)   
             {
                 if (int.TryParse(presize, out x))// && Convert.ToInt32(presize) <= 0)
                 {
