@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
+
 namespace preCalc
 {
+
     class Program
     {
+        public static List<History> log = new List<History>();
         static void Main(string[] args)
         {
             //bool exit = false;
@@ -29,6 +33,7 @@ namespace preCalc
             Console.WriteLine("3) Calculator MULTIPLY");
             Console.WriteLine("4) Calculator DIVISION");
             Console.WriteLine("5) Matrix multiplication");
+            Console.WriteLine("6) History of mathematical operations");
             string result = Console.ReadLine();
             if (result == "1")
             {
@@ -50,7 +55,11 @@ namespace preCalc
             {
                 matrixMultiply();
             }
-            else 
+            else if (result == "6")
+            {
+                calculatorHistory();
+            }
+            else
             {
                 /*Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Please enter the numbers from 1 to 5");
@@ -58,7 +67,7 @@ namespace preCalc
                 Console.ForegroundColor = ConsoleColor.White;
              To rework input validato   
              */
-                
+
             }
         }
         static double inputNumber1()
@@ -113,6 +122,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Magenta;
             double result = a + b;
             Console.WriteLine("{0}+{1}={2}", a, b, result);
+            log.Add(new History(a,b,result));
             return result;
         }
         static double CalculatorSubstract()
@@ -125,6 +135,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Gray;
             double result = a - b;
             Console.WriteLine("{0}-{1}={2}", a, b, result);
+            
             return result;
         }
         static double CalculatorMultiply()
@@ -137,6 +148,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Cyan;
             double result = a * b;
             Console.WriteLine("{0}*{1}={2}", a, b, result);
+            
             return result;
         }
         static double CalculatorDivision()
@@ -149,9 +161,22 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Yellow;
             double result = a / b;
             Console.WriteLine("{0}/{1}={2}", a, b, result);
+           
             return result;
         }
 
+        static void calculatorHistory()
+        {
+            if (log.Count == 0)
+            {
+                Console.WriteLine("You have no data in history");
+            }
+            foreach (History entry in log)
+            {
+                Console.WriteLine("{0}, {1}={2}",entry.A,entry.B,entry.Result);
+            }
+
+        }
         static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
             double temp2;
@@ -163,7 +188,6 @@ namespace preCalc
             }
             return true;
         }
-
         static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
         {
             int temp2;
@@ -175,7 +199,6 @@ namespace preCalc
             }
             return true;
         }
-
         static bool matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -183,7 +206,7 @@ namespace preCalc
             Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly whole numbers >0 are allowed");
             string presize = Console.ReadLine();
             int x;  // Needed to work with int.TryParse
-            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)   
+            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)
             {
                 if (int.TryParse(presize, out x))// && Convert.ToInt32(presize) <= 0)
                 {
@@ -260,4 +283,17 @@ namespace preCalc
             return true;
         }
     }
+    class History
+    {
+        public double Result { get; set; }
+        public double A { get; set; }
+        public double B { get; set; }
+        public History(double a, double b, double result) //конструктор
+        {
+            this.A = a;
+            this.B = b;
+            this.Result = result;                    
+        }
+    }
 }
+
