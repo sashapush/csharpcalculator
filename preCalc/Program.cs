@@ -287,7 +287,7 @@ namespace preCalc
             Console.Write("\n\n");
             return true;
         }
-        public void BMI()//(string weight, string height, string name)
+        static void BMI()//(string weight, string height, string name)
         {
             bool toStop = true;
             List<User> users = new List<User>();
