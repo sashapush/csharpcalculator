@@ -22,7 +22,7 @@ namespace preCalc
                 else Console.ForegroundColor = ConsoleColor.White;
             }
         }
-        private static void MainMenu()
+        public static void MainMenu()
         {
             Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -34,6 +34,7 @@ namespace preCalc
             Console.WriteLine("4) Calculator DIVISION");
             Console.WriteLine("5) Matrix multiplication");
             Console.WriteLine("6) History of mathematical operations");
+            Console.WriteLine("7) Body mass index calculator");
             string result = Console.ReadLine();
             if (result == "1")
             {
@@ -168,13 +169,13 @@ namespace preCalc
             log.Add(new History(a, b, result));
             return result;
         }
-
         static void calculatorHistory()
         {
-            if (log.Count == 0)
+            if (log.Count == 0 )
             {
                 Console.WriteLine("\nYou have no data in history");
             }
+            //else if users.Count>1 - output the information from log.
             foreach (History entry in log)
             {
                 Console.WriteLine("{0}, {1}={2}", entry.A, entry.B, entry.Result);
@@ -286,26 +287,35 @@ namespace preCalc
             Console.Write("\n\n");
             return true;
         }
-        static void BMI()//(string weight, string height, string name)
+        public void BMI()//(string weight, string height, string name)
         {
-            //while 
-            User user1 = new User();
-            Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
-            user1.name = Console.ReadLine();
-            Console.WriteLine("Height, in cm");
-            user1.height = Console.ReadLine();
-            Console.WriteLine("Weight, in kg");
-            user1.weight = Console.ReadLine();
-            user1.bmi = double.Parse(user1.weight) / ((double.Parse(user1.height) / 100) * (double.Parse(user1.height) / 100));
-            Console.WriteLine("name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
-            //would you like to calculate BMI for another user? if yes - continue, else break;
+            bool toStop = true;
+            List<User> users = new List<User>();
+            while (toStop)
+            {
+                User user1 = new User();
+                Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
+                user1.name = Console.ReadLine();
+                Console.WriteLine("Height, in cm");
+                user1.height = double.Parse(Console.ReadLine());
+                Console.WriteLine("Weight, in kg");
+                user1.weight = double.Parse(Console.ReadLine());
+                user1.bmi = user1.weight / (user1.height / 100) * (user1.height / 100);
+                Console.WriteLine("name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
+                users.Add(user1);
+                Console.WriteLine("Would you like to calculate BMI for another user?\nType 'y' and ENTER to confirm or any other key to ESC/ return to Menu;");
+                //ESCape from the app/return to menu;
+                string reply = Console.ReadLine();
+                if (reply == "y") continue;
+                else MainMenu();
+            }
         }
     }
     class User
     {
         public string name { get; set; }
-        public string weight { get; set; }
-        public string height { get; set; }
+        public double weight { get; set; }
+        public double height { get; set; }
         public double bmi { get; set; }
     }
 
