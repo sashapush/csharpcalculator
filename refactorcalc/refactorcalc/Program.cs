@@ -3,8 +3,33 @@ using System.Collections.Generic;
 
 namespace preCalc
 {
+    class Validators
+    {
+        static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
+        {
+            double temp2;
+            while (!double.TryParse(input, out temp2))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("input needs to be a number, try again");
+                return false;
+            }
+            return true;
+        }
+        static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
+        {
+            int temp2;
+            while (!int.TryParse(input, out temp2))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("input needs to be a whole number, try again");
+                return false;
+            }
+            return true;
+        }
+    }
 
-    class Program
+    class Program : User
     {
         public static List<History> log = new List<History>();
         static void Main(string[] args)
@@ -26,7 +51,7 @@ namespace preCalc
         {
             Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Type in a number from 1 to 5 and confirm it with ENTER key:\n");
+            Console.WriteLine("Type in a number from 1 to 7 and confirm it with ENTER key:\n");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("1) Calculator SUM");
             Console.WriteLine("2) Calculator SUBSCTRACT");
@@ -62,7 +87,7 @@ namespace preCalc
             }
             else if (result == "7")
             {
-                BMI();
+                User.BMI();
             }
             else
             {
@@ -127,7 +152,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Magenta;
             double result = a + b;
             Console.WriteLine("{0}+{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+            log.Add(new History(a, "+", b, result));
             return result;
         }
         static double CalculatorSubstract()
@@ -140,7 +165,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Gray;
             double result = a - b;
             Console.WriteLine("{0}-{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+            log.Add(new History(a, "-", b, result));
             return result;
         }
         static double CalculatorMultiply()
@@ -153,7 +178,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Cyan;
             double result = a * b;
             Console.WriteLine("{0}*{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+            log.Add(new History(a, "*", b, result));
             return result;
         }
         static double CalculatorDivision()
@@ -166,7 +191,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Yellow;
             double result = a / b;
             Console.WriteLine("{0}/{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+            log.Add(new History(a, "/", b, result));
             return result;
         }
         static void calculatorHistory()
@@ -178,7 +203,7 @@ namespace preCalc
             //else if users.Count>1 - output the information from log.
             foreach (History entry in log)
             {
-                Console.WriteLine("{0}, {1}={2}", entry.A, entry.B, entry.Result);
+                Console.WriteLine("{0}{1}{2}={3}", entry.A, entry.Operand, entry.B, entry.Result);
             }
 
         }
@@ -287,49 +312,67 @@ namespace preCalc
             Console.Write("\n\n");
             return true;
         }
-        static void BMI()//(string weight, string height, string name)
+        static void bmiHistory()
+        {
+            //users;
+        }
+
+    }
+    class User
+    {
+        private int id { get; set; }
+        public string name { get; set; }
+        public double weight { get; set; }
+        public double height { get; set; }
+        public double bmi { get; set; }
+        public User()
+        {
+            // to do incremential ID           id++;
+        }
+        protected static void BMI()//(string weight, string height, string name)
         {
             bool toStop = true;
             List<User> users = new List<User>();
             while (toStop)
             {
-                User user1 = new User();
+                var user1 = new User();
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
                 user1.name = Console.ReadLine();
                 Console.WriteLine("Height, in cm");
                 user1.height = double.Parse(Console.ReadLine());
                 Console.WriteLine("Weight, in kg");
                 user1.weight = double.Parse(Console.ReadLine());
-                user1.bmi = user1.weight / (user1.height / 100) * (user1.height / 100);
+                user1.bmi = user1.weight / ((user1.height / 100) * (user1.height / 100));
                 Console.WriteLine("name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
                 users.Add(user1);
                 Console.WriteLine("Would you like to calculate BMI for another user?\nType 'y' and ENTER to confirm or any other key to ESC/ return to Menu;");
                 //ESCape from the app/return to menu;
                 string reply = Console.ReadLine();
                 if (reply == "y") continue;
-                else MainMenu();
+                else toStop = false;
             }
         }
+        /*public User(int id, string name, double weight, double height)
+        {
+            this.name = name;
+            this.weight = weight;
+            this.height = height;
+            id++;
+        }*/
     }
-    class User
-    {
-        public string name { get; set; }
-        public double weight { get; set; }
-        public double height { get; set; }
-        public double bmi { get; set; }
-    }
-
-
     class History
     {
-        public double Result { get; set; }
-        public double A { get; set; }
-        public double B { get; set; }
-        public History(double a, double b, double result) //конструктор
+        public double Result;// { get; set; }
+        public double A;// { get; set; }
+        public string Operand;// { get; set; }
+        public double B;// { get; set; }
+        public History(double a, string operand, double b, double result) //конструктор
         {
-            this.A = a;
-            this.B = b;
-            this.Result = result;
+            A = a;
+            Operand = operand;
+            B = b;
+            Result = result;
         }
     }
 
