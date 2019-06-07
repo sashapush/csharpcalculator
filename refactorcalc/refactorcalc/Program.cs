@@ -5,7 +5,7 @@ namespace preCalc
 {
     class Validators
     {
-        static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
+        protected static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
             double temp2;
             while (!double.TryParse(input, out temp2))
@@ -26,6 +26,25 @@ namespace preCalc
                 return false;
             }
             return true;
+        }
+        //REMOVE INPUT3 to another class;
+        protected static double inputNumber3()
+        {
+            double b;
+            //Console.WriteLine("Input second number, decimals are allowed, 0 is forbidden");
+            var number = Console.ReadLine();
+            while (!isValidNumber(number) || double.Parse(number) == 0)
+            {
+                if (double.TryParse(number, out b))
+                {
+                    Console.WriteLine("0 is invalid value,please provide other number");
+                    number = Console.ReadLine();
+                }
+                else
+                    number = Console.ReadLine();
+            }
+            b = double.Parse(number);
+            return b;
         }
     }
 
@@ -49,9 +68,9 @@ namespace preCalc
         }
         public static void MainMenu()
         {
-            Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
+            Console.WriteLine("\nHello and welcome to the calculator 3000 v0.92\nWhat would you like to do? \n");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Type in a number from 1 to 7 and confirm it with ENTER key:\n");
+            Console.WriteLine("Type in a number from 1 to 8 and confirm it with ENTER key:\n");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("1) Calculator SUM");
             Console.WriteLine("2) Calculator SUBSCTRACT");
@@ -60,6 +79,7 @@ namespace preCalc
             Console.WriteLine("5) Matrix multiplication");
             Console.WriteLine("6) History of mathematical operations");
             Console.WriteLine("7) Body mass index calculator");
+            Console.WriteLine("8) History of BMI calculations");
             string result = Console.ReadLine();
             if (result == "1")
             {
@@ -89,6 +109,10 @@ namespace preCalc
             {
                 User.BMI();
             }
+            else if (result == "8")
+            {
+                User.bmiHistory();
+            }
             else
             {
                 /*Console.ForegroundColor = ConsoleColor.Red;
@@ -97,13 +121,12 @@ namespace preCalc
                 Console.ForegroundColor = ConsoleColor.White;
              To rework input validato   
              */
-
             }
         }
-        static double inputNumber1()
+        static double inputNumber()
         {
             double a;
-            Console.WriteLine("Input A, decimals and 0 are allowed");
+            Console.WriteLine("Please enter a number, decimals and 0 are allowed");
             var number = Console.ReadLine();
             while (!isValidNumber(number))
             {
@@ -112,22 +135,10 @@ namespace preCalc
             a = double.Parse(number);
             return a;
         }
-        static double inputNumber2()
-        {
-            double b;
-            Console.WriteLine("Input B, decimals and 0 are allowed");
-            var number = Console.ReadLine();
-            while (!isValidNumber(number))
-            {
-                number = Console.ReadLine();
-            }
-            b = double.Parse(number);
-            return b;
-        }
         static double inputNumber3()
         {
             double b;
-            Console.WriteLine("Input B, decimals are allowed");
+            Console.WriteLine("Input second number, decimals are allowed, 0 is forbidden");
             var number = Console.ReadLine();
             while (!isValidNumber(number) || double.Parse(number) == 0)
             {
@@ -146,9 +157,9 @@ namespace preCalc
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("You've selected SUM operation");
-            double a = inputNumber1();
+            double a = inputNumber();
             Console.ForegroundColor = ConsoleColor.Magenta;
-            double b = inputNumber2();
+            double b = inputNumber();
             Console.ForegroundColor = ConsoleColor.Magenta;
             double result = a + b;
             Console.WriteLine("{0}+{1}={2}", a, b, result);
@@ -159,9 +170,9 @@ namespace preCalc
         {
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("You've selected SUBSTRACT operation");
-            double a = inputNumber1();
+            double a = inputNumber();
             Console.ForegroundColor = ConsoleColor.Gray;
-            double b = inputNumber2();
+            double b = inputNumber();
             Console.ForegroundColor = ConsoleColor.Gray;
             double result = a - b;
             Console.WriteLine("{0}-{1}={2}", a, b, result);
@@ -172,9 +183,9 @@ namespace preCalc
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("You've selected MULTIPLY operation");
-            double a = inputNumber1();
+            double a = inputNumber();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            double b = inputNumber2();
+            double b = inputNumber();
             Console.ForegroundColor = ConsoleColor.Cyan;
             double result = a * b;
             Console.WriteLine("{0}*{1}={2}", a, b, result);
@@ -185,7 +196,7 @@ namespace preCalc
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("You've selected DIVISION operation");
-            double a = inputNumber1();
+            double a = inputNumber();
             Console.ForegroundColor = ConsoleColor.Yellow;
             double b = inputNumber3();/////////////////////////////////////////////////////////
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -201,7 +212,7 @@ namespace preCalc
                 Console.WriteLine("\nYou have no data in history");
             }
             //else if users.Count>1 - output the information from log.
-            foreach (History entry in log)
+            else foreach (History entry in log)
             {
                 Console.WriteLine("{0}{1}{2}={3}", entry.A, entry.Operand, entry.B, entry.Result);
             }
@@ -312,19 +323,19 @@ namespace preCalc
             Console.Write("\n\n");
             return true;
         }
-        static void bmiHistory()
-        {
-            //users;
-        }
+
 
     }
-    class User
+    class User : Validators
     {
         private int id { get; set; }
         public string name { get; set; }
         public double weight { get; set; }
         public double height { get; set; }
         public double bmi { get; set; }
+
+        static List<User> users = new List<User>();
+
         public User()
         {
             // to do incremential ID           id++;
@@ -332,19 +343,18 @@ namespace preCalc
         protected static void BMI()//(string weight, string height, string name)
         {
             bool toStop = true;
-            List<User> users = new List<User>();
-            while (toStop)
+           while (toStop)
             {
                 var user1 = new User();
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
                 user1.name = Console.ReadLine();
                 Console.WriteLine("Height, in cm");
-                user1.height = double.Parse(Console.ReadLine());
+                user1.height = inputNumber3();
                 Console.WriteLine("Weight, in kg");
                 user1.weight = double.Parse(Console.ReadLine());
                 user1.bmi = user1.weight / ((user1.height / 100) * (user1.height / 100));
-                Console.WriteLine("name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
+                Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
                 users.Add(user1);
                 Console.WriteLine("Would you like to calculate BMI for another user?\nType 'y' and ENTER to confirm or any other key to ESC/ return to Menu;");
                 //ESCape from the app/return to menu;
@@ -360,6 +370,20 @@ namespace preCalc
             this.height = height;
             id++;
         }*/
+
+        protected static void bmiHistory()
+        {
+            if (users.Count == 0)
+            {
+                Console.WriteLine("\nYou have no data in history");
+            }
+            else Console.WriteLine("Here are the results of BMI calculations:");
+            foreach (var user in users)
+            {
+                Console.WriteLine("{0}\t Height {1}\t Weight {2}\t BMI {3}", user.name, user.height, user.weight, user.bmi);
+            }
+            Console.WriteLine("\n");
+        }
     }
     class History
     {
