@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
+
 namespace preCalc
 {
+
     class Program
     {
+        public static List<History> log = new List<History>();
         static void Main(string[] args)
         {
             //bool exit = false;
@@ -18,7 +22,7 @@ namespace preCalc
                 else Console.ForegroundColor = ConsoleColor.White;
             }
         }
-        private static void MainMenu()
+        public static void MainMenu()
         {
             Console.WriteLine("\nHello and welcome to the calculator 3000 v0.9\nWhat would you like to do? \n");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -29,6 +33,8 @@ namespace preCalc
             Console.WriteLine("3) Calculator MULTIPLY");
             Console.WriteLine("4) Calculator DIVISION");
             Console.WriteLine("5) Matrix multiplication");
+            Console.WriteLine("6) History of mathematical operations");
+            Console.WriteLine("7) Body mass index calculator");
             string result = Console.ReadLine();
             if (result == "1")
             {
@@ -50,7 +56,15 @@ namespace preCalc
             {
                 matrixMultiply();
             }
-            else 
+            else if (result == "6")
+            {
+                calculatorHistory();
+            }
+            else if (result == "7")
+            {
+                BMI();
+            }
+            else
             {
                 /*Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Please enter the numbers from 1 to 5");
@@ -58,7 +72,7 @@ namespace preCalc
                 Console.ForegroundColor = ConsoleColor.White;
              To rework input validato   
              */
-                
+
             }
         }
         static double inputNumber1()
@@ -113,6 +127,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Magenta;
             double result = a + b;
             Console.WriteLine("{0}+{1}={2}", a, b, result);
+            log.Add(new History(a, b, result));
             return result;
         }
         static double CalculatorSubstract()
@@ -125,6 +140,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Gray;
             double result = a - b;
             Console.WriteLine("{0}-{1}={2}", a, b, result);
+            log.Add(new History(a, b, result));
             return result;
         }
         static double CalculatorMultiply()
@@ -137,6 +153,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Cyan;
             double result = a * b;
             Console.WriteLine("{0}*{1}={2}", a, b, result);
+            log.Add(new History(a, b, result));
             return result;
         }
         static double CalculatorDivision()
@@ -149,9 +166,22 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Yellow;
             double result = a / b;
             Console.WriteLine("{0}/{1}={2}", a, b, result);
+            log.Add(new History(a, b, result));
             return result;
         }
+        static void calculatorHistory()
+        {
+            if (log.Count == 0)
+            {
+                Console.WriteLine("\nYou have no data in history");
+            }
+            //else if users.Count>1 - output the information from log.
+            foreach (History entry in log)
+            {
+                Console.WriteLine("{0}, {1}={2}", entry.A, entry.B, entry.Result);
+            }
 
+        }
         static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
             double temp2;
@@ -163,7 +193,6 @@ namespace preCalc
             }
             return true;
         }
-
         static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
         {
             int temp2;
@@ -175,7 +204,6 @@ namespace preCalc
             }
             return true;
         }
-
         static bool matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -183,7 +211,7 @@ namespace preCalc
             Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly whole numbers >0 are allowed");
             string presize = Console.ReadLine();
             int x;  // Needed to work with int.TryParse
-            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)   
+            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)
             {
                 if (int.TryParse(presize, out x))// && Convert.ToInt32(presize) <= 0)
                 {
@@ -259,5 +287,50 @@ namespace preCalc
             Console.Write("\n\n");
             return true;
         }
+        static void BMI()//(string weight, string height, string name)
+        {
+            bool toStop = true;
+            List<User> users = new List<User>();
+            while (toStop)
+            {
+                User user1 = new User();
+                Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
+                user1.name = Console.ReadLine();
+                Console.WriteLine("Height, in cm");
+                user1.height = double.Parse(Console.ReadLine());
+                Console.WriteLine("Weight, in kg");
+                user1.weight = double.Parse(Console.ReadLine());
+                user1.bmi = user1.weight / (user1.height / 100) * (user1.height / 100);
+                Console.WriteLine("name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
+                users.Add(user1);
+                Console.WriteLine("Would you like to calculate BMI for another user?\nType 'y' and ENTER to confirm or any other key to ESC/ return to Menu;");
+                //ESCape from the app/return to menu;
+                string reply = Console.ReadLine();
+                if (reply == "y") continue;
+                else MainMenu();
+            }
+        }
     }
+    class User
+    {
+        public string name { get; set; }
+        public double weight { get; set; }
+        public double height { get; set; }
+        public double bmi { get; set; }
+    }
+
+
+    class History
+    {
+        public double Result { get; set; }
+        public double A { get; set; }
+        public double B { get; set; }
+        public History(double a, double b, double result) //конструктор
+        {
+            this.A = a;
+            this.B = b;
+            this.Result = result;
+        }
+    }
+
 }
