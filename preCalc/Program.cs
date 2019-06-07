@@ -59,10 +59,6 @@ namespace preCalc
             {
                 calculatorHistory();
             }
-            else if (result == "7")
-            {
-                BMI();
-            }
             else
             {
                 /*Console.ForegroundColor = ConsoleColor.Red;
@@ -126,7 +122,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Magenta;
             double result = a + b;
             Console.WriteLine("{0}+{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+            log.Add(new History(a,b,result));
             return result;
         }
         static double CalculatorSubstract()
@@ -139,7 +135,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Gray;
             double result = a - b;
             Console.WriteLine("{0}-{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+            
             return result;
         }
         static double CalculatorMultiply()
@@ -152,7 +148,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Cyan;
             double result = a * b;
             Console.WriteLine("{0}*{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+            
             return result;
         }
         static double CalculatorDivision()
@@ -165,7 +161,7 @@ namespace preCalc
             Console.ForegroundColor = ConsoleColor.Yellow;
             double result = a / b;
             Console.WriteLine("{0}/{1}={2}", a, b, result);
-            log.Add(new History(a, b, result));
+           
             return result;
         }
 
@@ -173,11 +169,11 @@ namespace preCalc
         {
             if (log.Count == 0)
             {
-                Console.WriteLine("\nYou have no data in history");
+                Console.WriteLine("You have no data in history");
             }
             foreach (History entry in log)
             {
-                Console.WriteLine("{0}, {1}={2}", entry.A, entry.B, entry.Result);
+                Console.WriteLine("{0}, {1}={2}",entry.A,entry.B,entry.Result);
             }
 
         }
@@ -286,30 +282,7 @@ namespace preCalc
             Console.Write("\n\n");
             return true;
         }
-        static void BMI()//(string weight, string height, string name)
-        {
-            //while 
-            User user1 = new User();
-            Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
-            user1.name = Console.ReadLine();
-            Console.WriteLine("Height, in cm");
-            user1.height = Console.ReadLine();
-            Console.WriteLine("Weight, in kg");
-            user1.weight = Console.ReadLine();
-            user1.bmi = double.Parse(user1.weight) / ((double.Parse(user1.height) / 100) * (double.Parse(user1.height) / 100));
-            Console.WriteLine("name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
-            //would you like to calculate BMI for another user? if yes - continue, else break;
-        }
     }
-    class User
-    {
-        public string name { get; set; }
-        public string weight { get; set; }
-        public string height { get; set; }
-        public double bmi { get; set; }
-    }
-
-
     class History
     {
         public double Result { get; set; }
@@ -319,9 +292,8 @@ namespace preCalc
         {
             this.A = a;
             this.B = b;
-            this.Result = result;
+            this.Result = result;                    
         }
     }
-
 }
 
