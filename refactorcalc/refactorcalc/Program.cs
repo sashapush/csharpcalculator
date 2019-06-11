@@ -16,7 +16,7 @@ namespace preCalc
             }
             return true;
         }
-        static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
+        protected static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
         {
             int temp2;
             while (!int.TryParse(input, out temp2))
@@ -213,9 +213,9 @@ namespace preCalc
             }
             //else if users.Count>1 - output the information from log.
             else foreach (History entry in log)
-            {
-                Console.WriteLine("{0}{1}{2}={3}", entry.A, entry.Operand, entry.B, entry.Result);
-            }
+                {
+                    Console.WriteLine("{0}{1}{2}={3}", entry.A, entry.Operand, entry.B, entry.Result);
+                }
 
         }
         static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
@@ -229,25 +229,15 @@ namespace preCalc
             }
             return true;
         }
-        static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
-        {
-            int temp2;
-            while (!int.TryParse(input, out temp2))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("input needs to be a whole number, try again");
-                return false;
-            }
-            return true;
-        }
-        static bool matrixMultiply()
+
+        static void matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             string number; // Needed to work with isValidNumberMethod;
             Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly whole numbers >0 are allowed");
             string presize = Console.ReadLine();
             int x;  // Needed to work with int.TryParse
-            while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)
+            while (!Validators.isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)
             {
                 if (int.TryParse(presize, out x))// && Convert.ToInt32(presize) <= 0)
                 {
@@ -321,14 +311,13 @@ namespace preCalc
                     Console.Write("{0}\t", matrixMultiplyResult[i, j]);
             }
             Console.Write("\n\n");
-            return true;
         }
 
 
     }
     class User : Validators
     {
-        private int id { get; set; }
+        public int id { private get; set; }
         public string name { get; set; }
         public double weight { get; set; }
         public double height { get; set; }
@@ -343,7 +332,7 @@ namespace preCalc
         protected static void BMI()//(string weight, string height, string name)
         {
             bool toStop = true;
-           while (toStop)
+            while (toStop)
             {
                 var user1 = new User();
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -352,7 +341,7 @@ namespace preCalc
                 Console.WriteLine("Height, in cm");
                 user1.height = inputNumber3();
                 Console.WriteLine("Weight, in kg");
-                user1.weight = double.Parse(Console.ReadLine());
+                user1.weight = inputNumber3();
                 user1.bmi = user1.weight / ((user1.height / 100) * (user1.height / 100));
                 Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
                 users.Add(user1);
@@ -398,6 +387,7 @@ namespace preCalc
             B = b;
             Result = result;
         }
+
     }
 
 }
