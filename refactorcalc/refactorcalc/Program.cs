@@ -116,7 +116,7 @@ namespace preCalc
             else
             {
                 /*Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Please enter the numbers from 1 to 5");
+                Console.WriteLine("Please enter the numbers from 1 to 8");
                 MainMenu();
                 Console.ForegroundColor = ConsoleColor.White;
              To rework input validato   

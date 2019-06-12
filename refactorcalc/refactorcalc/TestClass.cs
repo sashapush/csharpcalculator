@@ -10,40 +10,9 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            bool exit = false;
-            while (!exit)
-            {
-                Console.WriteLine("Hello there");
-                string operation = Console.ReadLine();
-                if (operation == "+")
-                {
-                    var result = new CalculatorSum();
-                    result.Result();
-                }
-                else if (operation == "-")
-                {
-                    var result = new CalculatorSub();
-                    result.Result();
-                }
-                else if (operation == "*")
-                {
-                    var result = new CalculatorMultiply();
-                    result.Result();
-                }
-                else if (operation == "/")
-                {
-                    var result = new CalculatorDivision();
-                    result.Result();
-                }
-                else if (operation == "m")
-                {
-                    MatrixMultiply.matrixMultiply();
-                }
-                //Console.ReadLine();
-            }
+            MainMenu.displayMenu();
         }
     }
-
     abstract class BasicOperation
     {
         public static double a;
@@ -83,6 +52,21 @@ namespace TestApp
             a = double.Parse(number);
             return a;
         }
+        public static double inputNumber1()
+        {
+
+            double a;
+            Console.WriteLine("Please enter a number, decimals and 0 are allowed");
+            var number = Console.ReadLine();
+            while (!isValidNumber(number))
+            {
+
+                number = Console.ReadLine();
+            }
+            a = double.Parse(number);
+            return a;
+        }
+
         public static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
             double temp2;
@@ -94,8 +78,6 @@ namespace TestApp
             }
             return true;
         }
-
-
     }
     class CalculatorSum : BasicOperation
     {
@@ -108,6 +90,7 @@ namespace TestApp
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
                     b = inputNumber();
                     result = a + b;
                     Console.WriteLine("{0}+{1}={2}", a, b, result);
@@ -135,6 +118,7 @@ namespace TestApp
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
                     b = inputNumber();
                     result = a - b;
                     Console.WriteLine("{0}-{1}={2}", a, b, result);
@@ -162,9 +146,10 @@ namespace TestApp
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
                     b = inputNumber();
                     result = a * b;
-                    Console.WriteLine("{0}-{1}={2}", a, b, result);
+                    Console.WriteLine("{0}*{1}={2}", a, b, result);
                     log.Add(new History(a, b, result));
                 }
             }
@@ -172,7 +157,7 @@ namespace TestApp
             {
                 base.Result();
                 result = a * b;
-                Console.WriteLine("{0}-{1}={2}", a, b, result);
+                Console.WriteLine("{0}*{1}={2}", a, b, result);
                 log.Add(new History(a, b, result));
             }
             return result;
@@ -207,6 +192,7 @@ namespace TestApp
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
                     b = inputNumber();
                     result = a / b;
                     Console.WriteLine("{0}/{1}={2}", a, b, result);
@@ -324,9 +310,97 @@ namespace TestApp
     }
     class MainMenu
     {
-        public void displayMenu()
+        public static void displayMenu()
         {
+            bool exit = false;
+            while (!exit)
+            {
+                Console.WriteLine("Hello there");
+                string operation = Console.ReadLine();
+                if (operation == "+")
+                {
+                    var result = new CalculatorSum();
+                    result.Result();
+                }
+                else if (operation == "-")
+                {
+                    var result = new CalculatorSub();
+                    result.Result();
+                }
+                else if (operation == "*")
+                {
+                    var result = new CalculatorMultiply();
+                    result.Result();
+                }
+                else if (operation == "/")
+                {
+                    var result = new CalculatorDivision();
+                    result.Result();
+                }
+                else if (operation == "m")
+                {
+                    MatrixMultiply.matrixMultiply();
+                }
+                else if (operation == "b")
+                {
+                    User.BMI();
+                }
+                else if (operation == "h")
+                {
+                    User.bmiHistory();
+                }
+                else if (operation == "exit") { break; }
+            }
+        }
+    }
+    class User
+    {
+        public int id { private get; set; }
+        public string name { get; set; }
+        public double weight { get; set; }
+        public double height { get; set; }
+        public double bmi { get; set; }
+        static List<User> users = new List<User>();
+        public User()
+        {
+            // to do incremential ID           id++;
+        }
 
+        public static void BMI()//(string weight, string height, string name)
+        {
+            bool toStop = true;
+            while (toStop)
+            {
+                var user1 = new User();
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
+                user1.name = Console.ReadLine();
+                Console.WriteLine("Height, in cm");
+                user1.height = BasicOperation.inputNumber1();
+                Console.WriteLine("Weight, in kg");
+                user1.weight = BasicOperation.inputNumber1();
+                user1.bmi = user1.weight / ((user1.height / 100) * (user1.height / 100));
+                Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
+                users.Add(user1);
+                Console.WriteLine("Would you like to calculate BMI for another user?\nType 'y' and ENTER to confirm or any other key to ESC/ return to Menu;");
+                //ESCape from the app/return to menu;
+                string reply = Console.ReadLine();
+                if (reply == "y") continue;
+                else toStop = false;
+            }
+        }
+        public static void bmiHistory()
+        {
+            if (users.Count == 0)
+            {
+                Console.WriteLine("\nYou have no data in history");
+            }
+            else Console.WriteLine("Here are the results of BMI calculations:");
+            foreach (var user in users)
+            {
+                Console.WriteLine("{0}\t Height {1}\t Weight {2}\t BMI {3}", user.name, user.height, user.weight, user.bmi);
+            }
+            Console.WriteLine("\n");
         }
     }
 }
