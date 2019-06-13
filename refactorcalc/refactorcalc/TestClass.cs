@@ -19,15 +19,42 @@ namespace TestApp
         public static double b;
         public static double result;
         protected static List<History> log = new List<History>();
-        public virtual double Result()
+        public virtual void Result()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
-            //Console.WriteLine("You've selected SUM operation");
             a = inputNumber();
             Console.ForegroundColor = ConsoleColor.Magenta;
             b = inputNumber();
             Console.ForegroundColor = ConsoleColor.Magenta;
-            return result;
+            //return result;
+        }
+        public static void operationsHistory()
+        {
+            if (log.Count == 0)
+            {
+                Console.WriteLine("\nYou have no data in history");
+            }
+            //else if users.Count>1 - output the information from log.
+            else foreach (History entry in log)
+                {
+                    Console.WriteLine("{0}{1}{2}={3}", entry.A, entry.Operand, entry.B, entry.Result);
+                }
+
+        }
+        public static bool closeApp(string a)
+        {
+            if (a == "q")
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Exit command recognized, are you sure you want to Exit?\nPress \"y\" to confirm");
+                if (Console.ReadLine() == "y")
+                {
+                    Environment.Exit(0);
+                    return true;
+                }
+                else Console.WriteLine("Exit command suspended. Please proceed with entering the data.");
+            }
+            return false;
         }
         public static bool isValidNumberWhole(string input)  //whole numbers validator to be used in matrix size input;
         {
@@ -43,30 +70,35 @@ namespace TestApp
         public virtual double inputNumber()
         {
             double a;
-            Console.WriteLine("Please enter a number, decimals and 0 are allowed");
+            Console.WriteLine("Please enter a number, decimals and 0 are allowed\nOr type \"q\" to exit");
             var number = Console.ReadLine();
-            while (!isValidNumber(number))
+            if (!closeApp(number))
             {
-                number = Console.ReadLine();
+                while (!isValidNumber(number))
+                {
+                    number = Console.ReadLine();
+                    closeApp(number);
+                }
             }
             a = double.Parse(number);
             return a;
         }
         public static double inputNumber1()
         {
-
             double a;
-            Console.WriteLine("Please enter a number, decimals and 0 are allowed");
+            Console.WriteLine("Please enter a number, decimals and 0 are allowed\nOr type \"q\" to exit");
             var number = Console.ReadLine();
-            while (!isValidNumber(number))
+            if (!closeApp(number))
             {
-
-                number = Console.ReadLine();
+                while (!isValidNumber(number))
+                {
+                    number = Console.ReadLine();
+                    closeApp(number);
+                }
             }
             a = double.Parse(number);
             return a;
         }
-
         public static bool isValidNumber(string input)//=if(!isValid); ==if (!int.TryParse(Console.ReadLine(), out int resultA))
         {
             double temp2;
@@ -81,90 +113,114 @@ namespace TestApp
     }
     class CalculatorSum : BasicOperation
     {
-        public override double Result()
+        protected void DisplayResultAndLogHistory(double a, double b)
+        {
+            result = a + b;
+            Console.WriteLine("{0}+{1}={2}\n", a, b, result);
+            log.Add(new History(a, "+", b, result));
+        }
+        public override void Result()
         {
             if (log.Count > 0)
             {
-                Console.WriteLine("Would you like to use history?\nPress \"Y\" to use last inputed value. Or any other key to continue to the menu");
+                Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
+                    Console.WriteLine("You're performing SUM operation with the following value: {0}", a);
                     b = inputNumber();
-                    result = a + b;
-                    Console.WriteLine("{0}+{1}={2}", a, b, result);
-                    log.Add(new History(a, b, result));
+                    DisplayResultAndLogHistory(a, b);
+                }
+                else
+                {
+                    base.Result();
+                    DisplayResultAndLogHistory(a, b);
                 }
             }
             else if (log.Count == 0)
             {
                 base.Result();
-                result = a + b;
-                Console.WriteLine("{0}+{1}={2}", a, b, result);
-                log.Add(new History(a, b, result));
+                DisplayResultAndLogHistory(a, b);
             }
-            return result;
         }
     }
     class CalculatorSub : BasicOperation
     {
-        public override double Result()
+        protected void DisplayResultAndLogHistory(double a, double b)
+        {
+            result = a - b;
+            Console.WriteLine("{0}-{1}={2}\n", a, b, result);
+            log.Add(new History(a, "-", b, result));
+        }
+        public override void Result()
         {
             if (log.Count > 0)
             {
-                Console.WriteLine("Would you like to use history?\nPress \"Y\" to use last inputed value. Or any other key to continue to the menu");
+                Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
+                    Console.WriteLine("You're performing SUBSTRACT operation with the following value: {0}", a);
                     b = inputNumber();
-                    result = a - b;
-                    Console.WriteLine("{0}-{1}={2}", a, b, result);
-                    log.Add(new History(a, b, result));
+                    DisplayResultAndLogHistory(a, b);
+                }
+                else
+                {
+                    base.Result();
+                    DisplayResultAndLogHistory(a, b);
                 }
             }
             else if (log.Count == 0)
             {
                 base.Result();
-                result = a - b;
-                Console.WriteLine("{0}-{1}={2}", a, b, result);
-                log.Add(new History(a, b, result));
+                DisplayResultAndLogHistory(a, b);
             }
-            return result;
         }
     }
     class CalculatorMultiply : BasicOperation
     {
-        public override double Result()
+        protected void DisplayResultAndLogHistory(double a, double b)
+        {
+            result = a * b;
+            Console.WriteLine("{0}*{1}={2}\n", a, b, result);
+            log.Add(new History(a, "*", b, result));
+        }
+        public override void Result()
         {
             if (log.Count > 0)
             {
-                Console.WriteLine("Would you like to use history?\nPress \"Y\" to use last inputed value. Or any other key to continue to the menu");
+                Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
+                    Console.WriteLine("You're performing MULTIPLICATION operation with the following value: {0}", a);
                     b = inputNumber();
-                    result = a * b;
-                    Console.WriteLine("{0}*{1}={2}", a, b, result);
-                    log.Add(new History(a, b, result));
+                    DisplayResultAndLogHistory(a, b);
+                }
+                else
+                {
+                    base.Result();
+                    DisplayResultAndLogHistory(a, b);
                 }
             }
             else if (log.Count == 0)
             {
                 base.Result();
-                result = a * b;
-                Console.WriteLine("{0}*{1}={2}", a, b, result);
-                log.Add(new History(a, b, result));
+                DisplayResultAndLogHistory(a, b);
             }
-            return result;
         }
     }
     class CalculatorDivision : BasicOperation
     {
+        protected void DisplayResultAndLogHistory(double a, double b)
+        {
+            result = a / b;
+            Console.WriteLine("{0}/{1}={2}\n", a, b, result);
+            log.Add(new History(a, "/", b, result));
+        }
         public override double inputNumber()
         {
             double b;
@@ -183,31 +239,31 @@ namespace TestApp
             b = double.Parse(number);
             return b;
         }
-        public override double Result()
+        public override void Result()
         {
             if (log.Count > 0)
             {
-                Console.WriteLine("Would you like to use history?\nPress \"Y\" to use last inputed value. Or any other key to continue to the menu");
+                Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
                     a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
                     Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
                     b = inputNumber();
-                    result = a / b;
-                    Console.WriteLine("{0}/{1}={2}", a, b, result);
-                    log.Add(new History(a, b, result));
+                    DisplayResultAndLogHistory(a, b);
+                }
+                else
+                {
+                    base.Result();
+                    DisplayResultAndLogHistory(a, b);
                 }
             }
             else if (log.Count == 0)
             {
                 a = base.inputNumber();
                 b = inputNumber();
-                result = a / b;
-                Console.WriteLine("{0}/{1}={2}", a, b, result);
-                log.Add(new History(a, b, result));
+                DisplayResultAndLogHistory(a, b);
             }
-            return result;
         }
     }
     class MatrixMultiply : BasicOperation
@@ -299,11 +355,12 @@ namespace TestApp
     {
         public double Result;// { get; set; }
         public double A;// { get; set; }
-
+        public string Operand;
         public double B;// { get; set; }
-        public History(double a, double b, double result) //конструктор
+        public History(double a, string operand, double b, double result) //конструктор
         {
             A = a;
+            Operand = operand;
             B = b;
             Result = result;
         }
@@ -315,9 +372,13 @@ namespace TestApp
             bool exit = false;
             while (!exit)
             {
-                Console.WriteLine("Hello there");
+                Console.WriteLine("Hello there. Type in operation symbol to calculate,\n\"m\" to multiply matrixes,\n\"b\" to calculate body-mass index(BMI)\n\"h\" to view BMI calculations history\n\"H\" to view mathematical operations history \nor 'q' to exit");
                 string operation = Console.ReadLine();
-                if (operation == "+")
+                if (operation == "q")
+                {
+                    Environment.Exit(0);
+                }
+                else if (operation == "+")
                 {
                     var result = new CalculatorSum();
                     result.Result();
@@ -349,7 +410,10 @@ namespace TestApp
                 {
                     User.bmiHistory();
                 }
-                else if (operation == "exit") { break; }
+                else if (operation == "H")
+                {
+                    BasicOperation.operationsHistory();
+                }
             }
         }
     }
