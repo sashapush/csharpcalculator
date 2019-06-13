@@ -289,9 +289,9 @@ namespace TestApp
             }
             int n = Convert.ToInt32(presize);
             //Console displays the size of matrix;
-            int[,] matrix1 = new int[n, n];
-            int[,] matrix2 = new int[n, n];
-            int[,] matrixMultiplyResult = new int[n, n];
+            double[,] matrix1 = new double[n, n];
+            double[,] matrix2 = new double[n, n];
+            double[,] matrixMultiplyResult = new double[n, n];
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * n);
             Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
@@ -304,7 +304,7 @@ namespace TestApp
                     {
                         number = Console.ReadLine();
                     }
-                    matrix1[i, j] = Convert.ToInt32(number);
+                    matrix1[i, j] = Convert.ToDouble(number);
                     //possibly need additional validation on format (to prevent inserting double etc values);
                 }
             }
@@ -319,7 +319,7 @@ namespace TestApp
                     {
                         number = Console.ReadLine();
                     }
-                    matrix2[i, j] = Convert.ToInt32(number);
+                    matrix2[i, j] = Convert.ToDouble(number);
                 }
             }
             Console.Write("\nFirst matrix is:");
@@ -327,14 +327,20 @@ namespace TestApp
             {
                 Console.Write("\n");
                 for (int j = 0; j < n; j++)
+                {
+                    log.Add(new History(matrix1[i, j]));/////////////////////////////////
                     Console.Write("{0}\t", matrix1[i, j]);
+                }
             }
             Console.Write("\nSecond matrix is:");
             for (int i = 0; i < n; i++)
             {
                 Console.Write("\n");
                 for (int j = 0; j < n; j++)
-                    Console.Write("{0}\t", matrix2[i, j]);
+                {
+                    log.Add(new History(matrix2[i, j]));
+                    Console.Write("{0}\t", matrix2[i, j]); ////////////////////
+                }
             }
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
@@ -345,7 +351,11 @@ namespace TestApp
             {
                 Console.Write("\n");
                 for (int j = 0; j < n; j++)
+                {
+                    log.Add(new History(matrixMultiplyResult[i, j]));
                     Console.Write("{0}\t", matrixMultiplyResult[i, j]);
+                }
+
             }
             Console.Write("\n\n");
         }
@@ -363,6 +373,10 @@ namespace TestApp
             Operand = operand;
             B = b;
             Result = result;
+        }
+        public History(double a)
+        {
+            A = a;
         }
     }
     class MainMenu
