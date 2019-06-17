@@ -15,9 +15,12 @@ namespace TestApp
     }
     abstract class BasicOperation
     {
+        public static List<History> log = new List<History>();
+        public static List<History> matrixLog = new List<History>();
         public static double a;
         public static double b;
         public static double result;
+
         public virtual void Result()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -25,9 +28,18 @@ namespace TestApp
             Console.ForegroundColor = ConsoleColor.Magenta;
             b = inputNumber();
             Console.ForegroundColor = ConsoleColor.Magenta;
-            //return result;
         }
-
+        public static void operationsHistory()
+        {
+            if (log.Count == 0)
+            {
+                Console.WriteLine("\nYou have no data in history");
+            }
+            else foreach (History entry in log)
+                {
+                    Console.WriteLine("{0}{1}{2}={3}", entry.A, entry.Operand, entry.B, entry.Result);
+                }
+        }
         public static bool closeApp(string a)
         {
             if (a == "q")
@@ -106,6 +118,14 @@ namespace TestApp
             Console.WriteLine("{0}+{1}={2}\n", a, b, result);
             log.Add(new History(a, "+", b, result));
         }
+
+        private void useLastResult()
+        {
+            a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing SUM operation with the following value: {0}", a);
+            b = inputNumber();
+            DisplayResultAndLogHistory(a, b);
+        }
         public override void Result()
         {
             if (log.Count > 0)
@@ -114,10 +134,7 @@ namespace TestApp
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
-                    a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-                    Console.WriteLine("You're performing SUM operation with the following value: {0}", a);
-                    b = inputNumber();
-                    DisplayResultAndLogHistory(a, b);
+                    useLastResult();
                 }
                 else
                 {
@@ -134,6 +151,13 @@ namespace TestApp
     }
     class CalculatorSub : BasicOperation
     {
+        private void useLastResult()
+        {
+            a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing SUBSTRACT operation with the following value: {0}", a);
+            b = inputNumber();
+            DisplayResultAndLogHistory(a, b);
+        }
         protected void DisplayResultAndLogHistory(double a, double b)
         {
             result = a - b;
@@ -148,10 +172,7 @@ namespace TestApp
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
-                    a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-                    Console.WriteLine("You're performing SUBSTRACT operation with the following value: {0}", a);
-                    b = inputNumber();
-                    DisplayResultAndLogHistory(a, b);
+                    useLastResult();
                 }
                 else
                 {
@@ -168,6 +189,13 @@ namespace TestApp
     }
     class CalculatorMultiply : BasicOperation
     {
+        private void useLastResult()
+        {
+            a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing MULTIPLY operation with the following value: {0}", a);
+            b = inputNumber();
+            DisplayResultAndLogHistory(a, b);
+        }
         protected void DisplayResultAndLogHistory(double a, double b)
         {
             result = a * b;
@@ -182,10 +210,7 @@ namespace TestApp
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
-                    a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-                    Console.WriteLine("You're performing MULTIPLICATION operation with the following value: {0}", a);
-                    b = inputNumber();
-                    DisplayResultAndLogHistory(a, b);
+                    useLastResult();
                 }
                 else
                 {
@@ -202,6 +227,14 @@ namespace TestApp
     }
     class CalculatorDivision : BasicOperation
     {
+        private void useLastResult()
+        {
+            a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
+            b = inputNumber();
+            DisplayResultAndLogHistory(a, b);
+        }
+
         protected void DisplayResultAndLogHistory(double a, double b)
         {
             result = a / b;
@@ -234,10 +267,7 @@ namespace TestApp
                 var answer = Console.ReadLine();
                 if (answer == "y")
                 {
-                    a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-                    Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
-                    b = inputNumber();
-                    DisplayResultAndLogHistory(a, b);
+                    useLastResult();
                 }
                 else
                 {
@@ -255,16 +285,13 @@ namespace TestApp
     }
     class MatrixMultiply : BasicOperation
     {
-        public static void matrixMultiply()
+        private static int defineMatrixSize()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            string number; // Needed to work with isValidNumberMethod;
-            Console.WriteLine("Please define how many rows and columns your matrices have.\nOnly whole numbers >0 are allowed");
             string presize = Console.ReadLine();
             int x;  // Needed to work with int.TryParse
             while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)
             {
-                if (int.TryParse(presize, out x))// && Convert.ToInt32(presize) <= 0)
+                if (int.TryParse(presize, out x))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Matrix Size can't be less or equal to 0");
@@ -275,96 +302,95 @@ namespace TestApp
                 Console.ForegroundColor = ConsoleColor.Green;
             }
             int n = Convert.ToInt32(presize);
-            //Console displays the size of matrix;
-            double[,] matrix1 = new double[n, n];
-            double[,] matrix2 = new double[n, n];
-            double[,] matrixMultiplyResult = new double[n, n];
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * n);
-            Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    number = Console.ReadLine();
-                    while (!isValidNumber(number))
-                    {
-                        number = Console.ReadLine();
-                    }
-                    matrix1[i, j] = Convert.ToDouble(number);
-                    //possibly need additional validation on format (to prevent inserting double etc values);
-                }
-            }
-            Console.Write("Enter {0} elements of the second matrix, separated by ENTER:\n", n * n);
-            Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    number = Console.ReadLine();
-                    while (!isValidNumber(number))
-                    {
-                        number = Console.ReadLine();
-                    }
-                    matrix2[i, j] = Convert.ToDouble(number);
-                }
-            }
-            Console.Write("\nFirst matrix is:");
-            for (int i = 0; i < n; i++)
-            {
-                Console.Write("\n");
-                for (int j = 0; j < n; j++)
-                {
-                    log.Add(new History(matrix1[i, j]));/////////////////////////////////
-                    Console.Write("{0}\t", matrix1[i, j]);
-                }
-            }
-            Console.Write("\nSecond matrix is:");
-            for (int i = 0; i < n; i++)
-            {
-                Console.Write("\n");
-                for (int j = 0; j < n; j++)
-                {
-                    log.Add(new History(matrix2[i, j]));
-                    Console.Write("{0}\t", matrix2[i, j]); ////////////////////
-                }
-            }
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    matrixMultiplyResult[i, j] = matrix1[i, j] * matrix2[i, j];
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("\nResult of matrix multiplication: \n");
-            for (int i = 0; i < n; i++)
-            {
-                Console.Write("\n");
-                for (int j = 0; j < n; j++)
-                {
-                    log.Add(new History(matrixMultiplyResult[i, j]));
-                    Console.Write("{0}\t", matrixMultiplyResult[i, j]);
-                }
-
-            }
-            Console.Write("\n\n");
+            return n;
         }
-}
+        private static void fillMatrixWithInput(int n, int m, Matrix[,] matrix)
+        {
+            Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
+            string number;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    number = Console.ReadLine();
+                    while (!isValidNumber(number))
+                    {
+                        number = Console.ReadLine();
+                    }
+                    matrix[i, j] = number.ToString;
+                }
+            }
+        }
+        //private static void displayInputedMatrix(int n, int m, Matrix[,] matrix)
+        //{
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        Console.Write("\n");
+        //        for (int j = 0; j < m; j++)
+        //        {
+        //            Console.Write("{0}\t", matrix[i, j]);
+        //        }
+        //    }
+
+        //}
+        //private static void calcualteMatrixMultiplicationResult(int n, int m, Matrix[,] matrix1, Matrix[,] matrix2, Matrix[,] resultingMatrix)
+        //{
+        //    for (int i = 0; i < n; i++)
+        //        for (int j = 0; j < m; j++)
+        //            resultingMatrix[i, j] = matrix1[i, j] * matrix2[i, j];
+        //    Console.ForegroundColor = ConsoleColor.DarkGreen;
+        //}
+        //private static void displayMultiplicationResult(int n, int m, Matrix[,] resultingMatrix)
+        //{
+        //    Console.Write("\nResult of matrix multiplication: \n");
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        Console.Write("\n");
+        //        for (int j = 0; j < m; j++)
+        //        {
+        //            //log.Add(new History(resultingMatrix[i, j]));
+        //            Console.Write("{0}\t", resultingMatrix[i, j]);
+        //        }
+
+        //    }
+        //    Console.Write("\n\n");
+        //}
+        public static void matrixMultiply()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Please define how many rows your matrices have.\nOnly whole numbers >0 are allowed");
+            int n = defineMatrixSize();
+            Console.WriteLine("Please define how many columns your matrices have.\nOnly whole numbers >0 are allowed");
+            int m = defineMatrixSize();
+            Matrix[,] matrix1 = new Matrix[n, m];// { { 1, 2 } };
+            matrix1.SetValue(2,0,0);
+            Matrix[,] matrix2 = new Matrix[n, m];
+            Matrix[,] matrixMultiplyResult = new Matrix[n, m];
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * m);
+            //fillMatrixWithInput(n, m, matrix1);
+            //Console.Write("Enter {0} elements of the second matrix, separated by ENTER:\n", n * m);
+            //fillMatrixWithInput(n, m, matrix2);
+            //Console.Write("\nFirst matrix is:");
+            //displayInputedMatrix(n, m, matrix1);
+            //Console.Write("\nSecond matrix is:");
+            //displayInputedMatrix(n, m, matrix2);
+            //calcualteMatrixMultiplicationResult(n, m, matrix1, matrix2, matrixMultiplyResult);
+            //displayMultiplicationResult(n, m, matrixMultiplyResult);
+        }
+    }
+    public class Matrix
+    {
+        public double v { get; set; }
+        public int n { get; set; }
+        public int m { get; set; }
+    }
     class History
     {
-        public static List<History> log = new List<History>();
-    public static void operationsHistory()
-    {
-        if (log.Count == 0)
-        {
-            Console.WriteLine("\nYou have no data in history");
-        }
-        else foreach (History entry in log)
-            {
-                Console.WriteLine("{0}{1}{2}={3}", entry.A, entry.Operand, entry.B, entry.Result);
-            }
-    }
-        public double Result;// { get; set; }
         public double A;// { get; set; }
         public string Operand;
         public double B;// { get; set; }
+        public double Result;
         public History(double a, string operand, double b, double result) //конструктор
         {
             A = a;
@@ -424,7 +450,7 @@ namespace TestApp
                 }
                 else if (operation == "H")
                 {
-                    History.operationsHistory();
+                    BasicOperation.operationsHistory();
                 }
             }
         }
