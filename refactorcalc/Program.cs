@@ -20,7 +20,6 @@ namespace TestApp
         public static double a;
         public static double b;
         public static double result;
-
         public virtual void Result()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -321,7 +320,7 @@ namespace TestApp
                 }
             }
         }
-        private static void displayInputedMatrix(int n, int m, double[,] matrix)
+        private static void displayMatrix(int n, int m, double[,] matrix)
         {
             for (int i = 0; i < n; i++)
             {
@@ -331,6 +330,7 @@ namespace TestApp
                     Console.Write("{0}\t", matrix[i, j]);
                 }
             }
+            Console.WriteLine("\n");
         }
         private static void calcualteMatrixMultiplicationResult(int n, int y, int m, double[,] matrix1, double[,] matrix2, double[,] resultingMatrix)
         {
@@ -340,30 +340,14 @@ namespace TestApp
                 {
                     resultingMatrix[i, j] = 0;
                     for (int k = 0; k < m; k++)
-                    { 
-                    resultingMatrix[i, j] += matrix1[i, k] * matrix2[k, j];
+                    {
+                        resultingMatrix[i, j] += matrix1[i, k] * matrix2[k, j];
                         //https://ru.stackoverflow.com/questions/304351/%D0%92%D1%81%D0%B5-%D0%B8%D0%BD%D0%B8%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BB-%D0%B2%D0%BE%D0%B7%D0%BD%D0%B8%D0%BA%D0%B0%D0%B5%D1%82-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B0%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B0-%D0%BD%D0%B0-%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82-%D0%BD%D0%B5-%D1%83%D0%BA%D0%B0%D0%B7%D1%8B%D0%B2%D0%B0%D0%B5%D1%82-%D0%BD%D0%B0-%D1%8D%D0%BA%D0%B7%D0%B5%D0%BC%D0%BF%D0%BB%D1%8F%D1%80}
                     }
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                 }
             }
         }
-        private static void displayMultiplicationResult(int n, int m, double[,] resultingMatrix)
-        {
-            Console.Write("\nResult of matrix multiplication: \n");
-            for (int i = 0; i < n; i++)
-            {
-                Console.Write("\n");
-                for (int j = 0; j < m; j++)
-                {
-                    //log.Add(new History(resultingMatrix[i, j]));
-                    Console.Write("{0}\t", resultingMatrix[i, j]);
-                }
-            }
-            Console.Write("\n\n");
-        }
-
-
         public static void matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -372,16 +356,16 @@ namespace TestApp
             Console.WriteLine("Please define how many columns your 1st matrix has.\nOnly whole numbers >0 are allowed");
             int m = defineMatrixSize();
             double[,] matrix1 = new double[n, m];
-            Console.WriteLine("Please define how many rows your 2nd matrix has.\nIt should be equal to *{0}* for valid multiplication",m);
+            Console.WriteLine("Please define how many rows your 2nd matrix has.\nIt should be equal to *{0}* for valid multiplication", m);
             int x = defineMatrixSize();
+            while (m != x)
+            {
+                Console.WriteLine("Can't multiply, please make sure 2nd matrix has {0} rows", m);
+                x = defineMatrixSize();
+            }
             Console.WriteLine("Please define how many columns your 2nd matrix has.\nOnly whole numbers >0 are allowed");
             int y = defineMatrixSize();
             double[,] matrix2 = new double[x, y];
-            while (m!=x)
-            {
-                Console.WriteLine("Can't multiply, please make sure 2nd matrix has {0} rows",n);
-                x = defineMatrixSize();
-            }
             //https://www.tutorialspoint.com/chash-program-to-multiply-two-matrices
             double[,] matrixMultiplyResult = new double[n, y];
             Console.ForegroundColor = ConsoleColor.Green;
@@ -390,24 +374,25 @@ namespace TestApp
             Console.Write("Enter {0} elements of the second matrix, separated by ENTER:\n", x * y);
             fillMatrixWithInput(x, y, matrix2);
             Console.Write("\nFirst matrix is:");
-            displayInputedMatrix(n, m, matrix1);
+            displayMatrix(n, m, matrix1);
             Console.Write("\nSecond matrix is:");
-            displayInputedMatrix(x, y, matrix2);
-            calcualteMatrixMultiplicationResult(n,y,m, matrix1, matrix2, matrixMultiplyResult);
-            displayMultiplicationResult(n, y, matrixMultiplyResult);
-            Matrix matrix = new Matrix(n,y,matrixMultiplyResult); //////////////////////////////////////////////
+            displayMatrix(x, y, matrix2);
+            calcualteMatrixMultiplicationResult(n, y, m, matrix1, matrix2, matrixMultiplyResult);
+            Console.Write("\nMatrixes multiplication result is: ");
+            displayMatrix(n, y, matrixMultiplyResult);
+            Matrix matrix = new Matrix(n, y, matrixMultiplyResult); //////////////////////////////////////////////
         }
     }
-    public class Matrix
+    class Matrix
     {
-        public double[,] v { get; set; }
-        public int rows { get; set; }
-        public int columns { get; set; }
+        public double[,] V { get; set; }
+        public int Rows { get; set; }
+        public int Columns { get; set; }
         public Matrix(int rows, int columns, double[,] v)
         {
-            this.rows = rows;
-            this.columns = columns;
-            this.v = v;
+            this.Rows = rows;
+            this.Columns = columns;
+            this.V = v;
         }
 
     }
@@ -437,101 +422,100 @@ namespace TestApp
             while (!exit)
             {
                 Console.WriteLine("Hello there. Type in operation symbol to calculate,\n\"m\" to multiply matrixes,\n\"b\" to calculate body-mass index(BMI)\n\"h\" to view BMI calculations history\n\"H\" to view mathematical operations history \nor 'q' to exit");
+                BasicOperation result = null;
                 string operation = Console.ReadLine();
-                if (operation == "q")
+                switch (operation)
                 {
-                    Environment.Exit(0);
+                    case ("q"):
+                        Environment.Exit(0);
+                        break;
+                    case ("+"):
+                        result = new CalculatorSum();
+                        result.Result();
+                        break;
+                    case ("-"):
+                        result = new CalculatorSub();
+                        result.Result();
+                        break;
+                    case ("*"):
+                        result = new CalculatorMultiply();
+                        result.Result();
+                        break;
+                    case ("/"):
+                        result = new CalculatorDivision();
+                        result.Result();
+                        break;
+                    case ("m"):
+                        MatrixMultiply.matrixMultiply();
+                        break;
+                    case ("b"):
+                        User.BMI();
+                        break;
+                    case ("h"):
+                        User.bmiHistory();
+                        break;
+                    case ("H"):
+                        BasicOperation.operationsHistory();
+                        break;
+                    default:
+                        Console.WriteLine("Please input one of the following symbols: q + - * / m b h H\n");
+                        break;
                 }
-                else if (operation == "+")
-                {
-                    var result = new CalculatorSum();
-                    result.Result();
-                }
-                else if (operation == "-")
-                {
-                    var result = new CalculatorSub();
-                    result.Result();
-                }
-                else if (operation == "*")
-                {
-                    var result = new CalculatorMultiply();
-                    result.Result();
-                }
-                else if (operation == "/")
-                {
-                    var result = new CalculatorDivision();
-                    result.Result();
-                }
-                else if (operation == "m")
-                {
-                    MatrixMultiply.matrixMultiply();
-                }
-                else if (operation == "b")
-                {
-                    User.BMI();
-                }
-                else if (operation == "h")
-                {
-                    User.bmiHistory();
-                }
-                else if (operation == "H")
-                {
-                    BasicOperation.operationsHistory();
-                }
-            }
-        }
-    }
-    class User
-    {
-        public int id { private get; set; }
-        public string name { get; set; }
-        public double weight { get; set; }
-        public double height { get; set; }
-        public double bmi { get; set; }
-        static List<User> users = new List<User>();
-        public User()
-        {
-            // to do incremential ID           id++;
-        }
-
-        public static void BMI()//(string weight, string height, string name)
-        {
-            bool toStop = true;
-            while (toStop)
-            {
-                var user1 = new User();
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
-                Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
-                user1.name = Console.ReadLine();
-                Console.WriteLine("Height, in cm");
-                user1.height = BasicOperation.inputNumber1();
-                Console.WriteLine("Weight, in kg");
-                user1.weight = BasicOperation.inputNumber1();
-                user1.bmi = user1.weight / ((user1.height / 100) * (user1.height / 100));
-                Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
-                users.Add(user1);
-                Console.WriteLine("Would you like to calculate BMI for another user?\nType 'y' and ENTER to confirm or any other key to ESC/ return to Menu;");
-                //ESCape from the app/return to menu;
-                string reply = Console.ReadLine();
-                if (reply == "y") continue;
-                else toStop = false;
-            }
-        }
-        public static void bmiHistory()
-        {
-            if (users.Count == 0)
-            {
-                Console.WriteLine("\nYou have no data in history");
-            }
-            else Console.WriteLine("Here are the results of BMI calculations:");
-            {
-                foreach (var user in users)
-                {
-                    Console.WriteLine("{0}\t Height {1}\t Weight {2}\t BMI {3}", user.name, user.height, user.weight, user.bmi);
-                }
-                Console.WriteLine("\n");
             }
         }
     }
 }
+class User
+{
+    public int id { private get; set; }
+    public string name { get; set; }
+    public double weight { get; set; }
+    public double height { get; set; }
+    public double bmi { get; set; }
+    static List<User> users = new List<User>();
+    public User()
+    {
+        // to do incremential ID           id++;
+    }
+
+    public static void BMI()//(string weight, string height, string name)
+    {
+        bool toStop = true;
+        while (toStop)
+        {
+            var user1 = new User();
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine("Hi and welcome to BMI calculator.\nPlease provide you info.\nName:");
+            user1.name = Console.ReadLine();
+            Console.WriteLine("Height, in cm");
+            user1.height = TestApp.BasicOperation.inputNumber1();
+            Console.WriteLine("Weight, in kg");
+            user1.weight = TestApp.BasicOperation.inputNumber1();
+            user1.bmi = user1.weight / ((user1.height / 100) * (user1.height / 100));
+            Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.name, user1.weight, user1.height, user1.bmi);
+            users.Add(user1);
+            Console.WriteLine("Would you like to calculate BMI for another user?\nType 'y' and ENTER to confirm or any other key to ESC/ return to Menu;");
+            //ESCape from the app/return to menu;
+            string reply = Console.ReadLine();
+            if (reply == "y") continue;
+            else toStop = false;
+        }
+    }
+    public static void bmiHistory()
+    {
+        if (users.Count == 0)
+        {
+            Console.WriteLine("\nYou have no data in history");
+        }
+        else Console.WriteLine("Here are the results of BMI calculations:");
+        {
+            foreach (var user in users)
+            {
+                Console.WriteLine("{0}\t Height {1}\t Weight {2}\t BMI {3}", user.name, user.height, user.weight, user.bmi);
+            }
+            Console.WriteLine("\n");
+        }
+    }
+}
+
 
