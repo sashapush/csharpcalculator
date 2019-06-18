@@ -304,7 +304,7 @@ namespace TestApp
             int n = Convert.ToInt32(presize);
             return n;
         }
-        private static void fillMatrixWithInput(int n, int m, Matrix[,] matrix)
+        private static void fillMatrixWithInput(int n, int m, double[,] matrix)
         {
             Console.WriteLine("Only whole numbers (0 included) are allowed:\n");
             string number;
@@ -317,37 +317,38 @@ namespace TestApp
                     {
                         number = Console.ReadLine();
                     }
-                    matrix[i, j] = new Matrix(Convert.ToDouble(number)); //https://stackoverflow.com/questions/11184534/how-to-initialize-an-array-of-custom-type // уточнить у Игоря, корректно ли заполнен объект.
+                    matrix[i, j] = Convert.ToDouble(number); //https://stackoverflow.com/questions/11184534/how-to-initialize-an-array-of-custom-type // уточнить у Игоря, корректно ли заполнен объект.
                 }
             }
         }
-        private static void displayInputedMatrix(int n, int m, Matrix[,] matrix)
+        private static void displayInputedMatrix(int n, int m, double[,] matrix)
         {
             for (int i = 0; i < n; i++)
             {
                 Console.Write("\n");
                 for (int j = 0; j < m; j++)
                 {
-                    Console.Write("{0}\t", matrix[i, j].v);
+                    Console.Write("{0}\t", matrix[i, j]);
                 }
             }
         }
-        private static void calcualteMatrixMultiplicationResult(int n, int y, int m, Matrix[,] matrix1, Matrix[,] matrix2, Matrix[,] resultingMatrix)
+        private static void calcualteMatrixMultiplicationResult(int n, int y, int m, double[,] matrix1, double[,] matrix2, double[,] resultingMatrix)
         {
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < y; j++)
                 {
+                    resultingMatrix[i, j] = 0;
                     for (int k = 0; k < m; k++)
-                    {
-                        resultingMatrix[i, j] = new Matrix((matrix1[i, k].v * matrix2[k, j].v));
+                    { 
+                    resultingMatrix[i, j] += matrix1[i, k] * matrix2[k, j];
                         //https://ru.stackoverflow.com/questions/304351/%D0%92%D1%81%D0%B5-%D0%B8%D0%BD%D0%B8%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BB-%D0%B2%D0%BE%D0%B7%D0%BD%D0%B8%D0%BA%D0%B0%D0%B5%D1%82-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B0%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B0-%D0%BD%D0%B0-%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82-%D0%BD%D0%B5-%D1%83%D0%BA%D0%B0%D0%B7%D1%8B%D0%B2%D0%B0%D0%B5%D1%82-%D0%BD%D0%B0-%D1%8D%D0%BA%D0%B7%D0%B5%D0%BC%D0%BF%D0%BB%D1%8F%D1%80}
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
                     }
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
                 }
             }
         }
-        private static void displayMultiplicationResult(int n, int m, Matrix[,] resultingMatrix)
+        private static void displayMultiplicationResult(int n, int m, double[,] resultingMatrix)
         {
             Console.Write("\nResult of matrix multiplication: \n");
             for (int i = 0; i < n; i++)
@@ -356,11 +357,13 @@ namespace TestApp
                 for (int j = 0; j < m; j++)
                 {
                     //log.Add(new History(resultingMatrix[i, j]));
-                    Console.Write("{0}\t", resultingMatrix[i, j].v);
+                    Console.Write("{0}\t", resultingMatrix[i, j]);
                 }
             }
             Console.Write("\n\n");
         }
+
+
         public static void matrixMultiply()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -368,19 +371,19 @@ namespace TestApp
             int n = defineMatrixSize();
             Console.WriteLine("Please define how many columns your 1st matrix has.\nOnly whole numbers >0 are allowed");
             int m = defineMatrixSize();
-            Matrix[,] matrix1 = new Matrix[n, m];
-            Console.WriteLine("Please define how many rows your 2nd matrix has.\nOnly whole numbers >0 are allowed");
+            double[,] matrix1 = new double[n, m];
+            Console.WriteLine("Please define how many rows your 2nd matrix has.\nIt should be equal to *{0}* for valid multiplication",m);
             int x = defineMatrixSize();
             Console.WriteLine("Please define how many columns your 2nd matrix has.\nOnly whole numbers >0 are allowed");
             int y = defineMatrixSize();
-            Matrix[,] matrix2 = new Matrix[x, y];
-            if (m != x)
+            double[,] matrix2 = new double[x, y];
+            while (m!=x)
             {
-                Console.WriteLine("Can't multiply");
+                Console.WriteLine("Can't multiply, please make sure 2nd matrix has {0} rows",n);
                 x = defineMatrixSize();
             }
             //https://www.tutorialspoint.com/chash-program-to-multiply-two-matrices
-            Matrix[,] matrixMultiplyResult = new Matrix[n, y];
+            double[,] matrixMultiplyResult = new double[n, y];
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * m);
             fillMatrixWithInput(n, m, matrix1);
@@ -390,19 +393,23 @@ namespace TestApp
             displayInputedMatrix(n, m, matrix1);
             Console.Write("\nSecond matrix is:");
             displayInputedMatrix(x, y, matrix2);
-            calcualteMatrixMultiplicationResult(m, y, n, matrix1, matrix2, matrixMultiplyResult);
-            displayMultiplicationResult(n, m, matrixMultiplyResult);
+            calcualteMatrixMultiplicationResult(n,y,m, matrix1, matrix2, matrixMultiplyResult);
+            displayMultiplicationResult(n, y, matrixMultiplyResult);
+            Matrix matrix = new Matrix(n,y,matrixMultiplyResult); //////////////////////////////////////////////
         }
     }
     public class Matrix
     {
-        public double v { get; set; }
+        public double[,] v { get; set; }
         public int rows { get; set; }
         public int columns { get; set; }
-        public Matrix(double v)
+        public Matrix(int rows, int columns, double[,] v)
         {
+            this.rows = rows;
+            this.columns = columns;
             this.v = v;
         }
+
     }
     class History
     {
