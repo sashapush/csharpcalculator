@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace TestApp
 {
@@ -15,8 +14,8 @@ namespace TestApp
     }
     abstract class BasicOperation
     {
+        public static List<double[,]> matrixResults = new List<double[,]>();
         public static List<History> log = new List<History>();
-        public static List<History> matrixLog = new List<History>();
         public static double a;
         public static double b;
         public static double result;
@@ -115,7 +114,7 @@ namespace TestApp
         {
             result = a + b;
             Console.WriteLine("{0}+{1}={2}\n", a, b, result);
-            log.Add(new History(a, "+", b, result));
+            //log.Add(new History(a, "+", b, result));
         }
 
         private void useLastResult()
@@ -147,6 +146,11 @@ namespace TestApp
                 DisplayResultAndLogHistory(a, b);
             }
         }
+    }
+    class Calculator
+    {
+        
+
     }
     class CalculatorSub : BasicOperation
     {
@@ -368,7 +372,6 @@ namespace TestApp
             double[,] matrix2 = new double[x, y];
             //https://www.tutorialspoint.com/chash-program-to-multiply-two-matrices
             double[,] matrixMultiplyResult = new double[n, y];
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * m);
             fillMatrixWithInput(n, m, matrix1);
             Console.Write("Enter {0} elements of the second matrix, separated by ENTER:\n", x * y);
@@ -380,7 +383,19 @@ namespace TestApp
             calcualteMatrixMultiplicationResult(n, y, m, matrix1, matrix2, matrixMultiplyResult);
             Console.Write("\nMatrixes multiplication result is: ");
             displayMatrix(n, y, matrixMultiplyResult);
-            Matrix matrix = new Matrix(n, y, matrixMultiplyResult); //////////////////////////////////////////////
+            matrixResults.Add(matrixMultiplyResult);
+            //////////////////matrix = new Matrix(n, y, matrixMultiplyResult); //////////////////////////////////////////////
+            Console.WriteLine("Please define how many rows your 2nd matrix has.\nIt should be equal to *{0}* for valid multiplication", m);
+            x = defineMatrixSize();
+            while (n != x)
+            {
+                Console.WriteLine("Can't multiply, please make sure 2nd matrix has {0} rows", n);
+                x = defineMatrixSize();
+            }
+            Console.WriteLine("Please define how many columns your 2nd matrix has.\nOnly whole numbers >0 are allowed");
+            y = defineMatrixSize();
+            double[,] matrix3 = new double[x, y];
+            calcualteMatrixMultiplicationResult(n, y, m, matrixMultiplyResult, matrix3, matrixMultiplyResult);
         }
     }
     class Matrix
@@ -388,11 +403,17 @@ namespace TestApp
         public double[,] V { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
+
+        public List<double[,]> matrixResults;
         public Matrix(int rows, int columns, double[,] v)
         {
             this.Rows = rows;
             this.Columns = columns;
             this.V = v;
+        }
+        public Matrix()
+        {
+
         }
 
     }
@@ -416,13 +437,13 @@ namespace TestApp
     }
     class MainMenu
     {
-        public static void displayMenu()
+        public static BasicOperation displayMenu()
         {
             bool exit = false;
+            BasicOperation result = null;
             while (!exit)
             {
-                Console.WriteLine("Hello there. Type in operation symbol to calculate,\n\"m\" to multiply matrixes,\n\"b\" to calculate body-mass index(BMI)\n\"h\" to view BMI calculations history\n\"H\" to view mathematical operations history \nor 'q' to exit");
-                BasicOperation result = null;
+                Console.WriteLine("Hello there. Type in operation '+', '-', '*', '/',  to calculate,\n\"m\" to multiply matrixes,\n\"b\" to calculate body-mass index(BMI)\n\"h\" to view BMI calculations history\n\"H\" to view mathematical operations history \nor 'q' to exit");
                 string operation = Console.ReadLine();
                 switch (operation)
                 {
@@ -461,7 +482,8 @@ namespace TestApp
                         Console.WriteLine("Please input one of the following symbols: q + - * / m b h H\n");
                         break;
                 }
-            }
+             }
+            return result;
         }
     }
     class User
@@ -490,9 +512,9 @@ namespace TestApp
             var user1 = new User();
             user1.Name = name;
             Console.WriteLine("Height, in cm");
-            user1.Height = TestApp.BasicOperation.inputNumber1();
+            user1.Height = BasicOperation.inputNumber1();
             Console.WriteLine("Weight, in kg");
-            user1.Weight = TestApp.BasicOperation.inputNumber1();
+            user1.Weight = BasicOperation.inputNumber1();
             user1.Bmi = calculateBMI(user1.Weight, user1.Height);
             Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.Name, user1.Weight, user1.Height, user1.Bmi);
             return user1;          
