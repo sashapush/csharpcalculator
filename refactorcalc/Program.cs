@@ -7,24 +7,26 @@ namespace refactorcalc
 {
     abstract class BasicOperation
     {
+        public double LastResult { get; set; }
         public static List<double[,]> matrixResults = new List<double[,]>();
         public static List<History> log = new List<History>();
-        public  double a;
-        public static string operand;
-        public static double b;
-        public static double result;
+        public double A;
+        public string operand;
+        public double B;
+        public double Result;
         public bool useLastResultCalc;
         public BasicOperation basicOperation;
-        public double LastResult { get; set; }
+
 
         public virtual void Calculate()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
-            a = inputNumber();
+            A = inputNumber();
             Console.ForegroundColor = ConsoleColor.Magenta;
-            b = inputNumber();
+            B = inputNumber();
             Console.ForegroundColor = ConsoleColor.Magenta;
         }
+
         public static void operationsHistory()
         {
             if (log.Count == 0)
@@ -61,6 +63,20 @@ namespace refactorcalc
                 return false;
             }
             return true;
+        }
+        public static void SetInputsForMathOperation(BasicOperation operation)
+        {
+            double input_1;
+            double input_2;
+            //if (UseLastValue)
+                //operation.A = LastResult;
+            //else
+            
+            input_1 = operation.inputNumber();
+            operation.A = input_1;
+            
+            input_2 = operation.inputNumber();
+            operation.B = input_2;
         }
         public virtual double inputNumber()
         {
@@ -106,17 +122,15 @@ namespace refactorcalc
             return true;
         }
     }
-
-
     class CalculatorSum : BasicOperation
     {
-        protected void DisplayResultAndLogHistory(double a, double b)
+        public void DisplayResultAndLogHistory(double a, double b)
         {
-            result = a + b;
-            Console.WriteLine("{0}+{1}={2}\n", a, b, result);
+
         }
-        private void checkIfUseLastResult(BasicOperation basicOperation=null)
+        public void checkIfUseLastResult(BasicOperation basicOperation = null)
         {
+            //check if OperationsHistory is empty;
             Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
             var answer = Console.ReadLine();
             if (answer == "y")
@@ -131,27 +145,28 @@ namespace refactorcalc
             switch (useLastResultCalc)
             {
                 case (true):
-                    a = basicOperation.a;
+                    A = basicOperation.A;
                     break;
                 case (false):
-                    a = inputNumber();
+                    A = inputNumber();
                     break;
             }
-            b = inputNumber();
+            B = inputNumber();
 
         }
         public override void Calculate()
         {
-            checkIfUseLastResult();
-            DisplayResultAndLogHistory(a, b);
+            //checkIfUseLastResult();
+            Result = A + B;
+            Console.WriteLine("{0}+{1}={2}\n", A, B, Result);
             //return basicOperation;
         }
         private void useLastResult()
         {
-            a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-            Console.WriteLine("You're performing SUM operation with the following value: {0}", a);
-            b = inputNumber();
-            DisplayResultAndLogHistory(a, b);
+            A = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing SUM operation with the following value: {0}", A);
+            B = inputNumber();
+            DisplayResultAndLogHistory(A, B);
         }
         //public override void Result()
         //{
@@ -180,93 +195,97 @@ namespace refactorcalc
     {
         private void useLastResult()
         {
-            a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-            Console.WriteLine("You're performing SUBSTRACT operation with the following value: {0}", a);
-            b = inputNumber();
-            DisplayResultAndLogHistory(a, b);
+            A = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing SUBSTRACT operation with the following value: {0}", A);
+            B = inputNumber();
+            DisplayResultAndLogHistory(A, B);
         }
         protected void DisplayResultAndLogHistory(double a, double b)
         {
-            result = a - b;
-            Console.WriteLine("{0}-{1}={2}\n", a, b, result);
-            log.Add(new History(a, "-", b, result));
+            //Result = a - b;
+            //Console.WriteLine("{0}-{1}={2}\n", a, b, Result);
+            //log.Add(new History(a, "-", b, Result));
         }
         public override void Calculate()
         {
-            if (log.Count > 0)
-            {
-                Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
-                var answer = Console.ReadLine();
-                if (answer == "y")
-                {
-                    useLastResult();
-                }
-                else
-                {
-                    base.Calculate();
-                    DisplayResultAndLogHistory(a, b);
-                }
-            }
-            else if (log.Count == 0)
-            {
-                base.Calculate();
-                DisplayResultAndLogHistory(a, b);
-            }
+            //if (log.Count > 0)
+            //{
+            //    Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
+            //    var answer = Console.ReadLine();
+            //    if (answer == "y")
+            //    {
+            //        useLastResult();
+            //    }
+            //    else
+            //    {
+            //        base.Calculate();
+            //        DisplayResultAndLogHistory(A, B);
+            //    }
+            //}
+            //else if (log.Count == 0)
+            //{
+            //    base.Calculate();
+            //    DisplayResultAndLogHistory(A, B);
+            //}
+            Result = A - B;
+            Console.WriteLine("{0}-{1}={2}\n", A, B, Result);
         }
     }
     class CalculatorMultiply : BasicOperation
     {
         private void useLastResult()
         {
-            a = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-            Console.WriteLine("You're performing MULTIPLY operation with the following value: {0}", a);
-            b = inputNumber();
-            DisplayResultAndLogHistory(a, b);
+            A = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing MULTIPLY operation with the following value: {0}", A);
+            B = inputNumber();
+            DisplayResultAndLogHistory(A, B);
         }
         protected void DisplayResultAndLogHistory(double a, double b)
         {
-            result = a * b;
-            Console.WriteLine("{0}*{1}={2}\n", a, b, result);
-            log.Add(new History(a, "*", b, result));
+            Result = a * b;
+            Console.WriteLine("{0}*{1}={2}\n", a, b, Result);
+            log.Add(new History(a, "*", b, Result));
         }
         public override void Calculate()
         {
-            if (log.Count > 0)
-            {
-                Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
-                var answer = Console.ReadLine();
-                if (answer == "y")
-                {
-                    useLastResult();
-                }
-                else
-                {
-                    base.Calculate();
-                    DisplayResultAndLogHistory(a, b);
-                }
-            }
-            else if (log.Count == 0)
-            {
-                base.Calculate();
-                DisplayResultAndLogHistory(a, b);
-            }
+            //if (log.Count > 0)
+            //{
+            //    Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
+            //    var answer = Console.ReadLine();
+            //    if (answer == "y")
+            //    {
+            //        useLastResult();
+            //    }
+            //    else
+            //    {
+            //        base.Calculate();
+            //        DisplayResultAndLogHistory(A, B);
+            //    }
+            //}
+            //else if (log.Count == 0)
+            //{
+            //    base.Calculate();
+            //    DisplayResultAndLogHistory(A, B);
+            //}
+            Result = A * B;
+            Console.WriteLine("{0}*{1}={2}\n", A, B, Result);
         }
     }
     class CalculatorDivision : BasicOperation
     {
         private void useLastResult()
         {
-            a = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
-            Console.WriteLine("You're performing DIVISION operation with the following value: {0}", a);
-            b = inputNumber();
-            DisplayResultAndLogHistory(a, b);
+            A = log.Select(l => l.Result).ToList().Last();  // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
+            Console.WriteLine("You're performing DIVISION operation with the following value: {0}", A);
+            B = inputNumber();
+            DisplayResultAndLogHistory(A, B);
         }
 
         protected void DisplayResultAndLogHistory(double a, double b)
         {
-            result = a / b;
-            Console.WriteLine("{0}/{1}={2}\n", a, b, result);
-            log.Add(new History(a, "/", b, result));
+            Result = a / b;
+            Console.WriteLine("{0}/{1}={2}\n", a, b, Result);
+            log.Add(new History(a, "/", b, Result));
         }
         public override double inputNumber()
         {
@@ -299,25 +318,25 @@ namespace refactorcalc
                 else
                 {
                     base.Calculate();
-                    DisplayResultAndLogHistory(a, b);
+                    DisplayResultAndLogHistory(A, B);
                 }
             }
             else if (log.Count == 0)
             {
-                a = base.inputNumber();
-                b = inputNumber();
-                DisplayResultAndLogHistory(a, b);
+                A = base.inputNumber();
+                B = inputNumber();
+                DisplayResultAndLogHistory(A, B);
             }
         }
     }
-   
+
     class History
     {
         public double A;// { get; set; }
         public string Operand;
         public double B;// { get; set; }
         public double Result;
-        public List <History> history;
+        public List<string> history;
         public History(double a, string operand, double b, double result) //конструктор
         {
             A = a;
@@ -325,64 +344,13 @@ namespace refactorcalc
             B = b;
             Result = result;
         }
-        
-        public void addLog(BasicOperation basicOperation)
+
+        public void addLog(string record)
         {
-          //  history.Add(basicOperation);
+            history.Add(record);
         }
     }
-    class MainMenu
-    {
-        public static BasicOperation displayMenu()
-        {
-            bool exit = false;
-            BasicOperation result = null;
-            while (!exit)
-            {
-                Console.WriteLine("Hello there. Type in operation '+', '-', '*', '/',  to calculate,\n\"m\" to multiply matrixes,\n\"b\" to calculate body-mass index(BMI)\n\"h\" to view BMI calculations history\n\"H\" to view mathematical operations history \nor 'q' to exit");
-                string operation = Console.ReadLine();
-                switch (operation)
-                {
-                    case ("q"):
-                        Environment.Exit(0);
-                        break;
-                    case ("+"):
-                        result = new CalculatorSum();
-                        //result.Calculate();
-                        break;
-                    case ("-"):
-                        result = new CalculatorSub();
-                        //result.Calculate();
-                        break;
-                    case ("*"):
-                        result = new CalculatorMultiply();
-                        //result.Calculate();
-                        break;
-                    case ("/"):
-                        result = new CalculatorDivision();
-                        //result.Calculate();
-                        break;
-                    case ("m"):
-                        MatrixMultiply.matrixMultiply();
-                        break;
-                    case ("b"):
-                        User.BMI();
-                        break;
-                    case ("h"):
-                        User.bmiHistory();
-                        break;
-                    case ("H"):
-                        BasicOperation.operationsHistory();
-                        break;
-                    default:
-                        Console.WriteLine("Please input one of the following symbols: q + - * / m b h H\n");
-                        break;
-                }
-                return result;
-            }
-            return result;
-        }
-    }
+
 
 
 

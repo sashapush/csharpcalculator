@@ -15,11 +15,11 @@ namespace refactorcalc
         public double Height { get; set; }
         public double Bmi { get; set; }
         static List<User> Users = new List<User>();
-        public User()
-        {
-            Id++;
-        }
-        private static double calculateBMI(double weight, double height)
+        //public User()
+        //{
+        //    Id++;
+        //}
+        public double calculateBMI(double weight, double height)
         {
             var Bmi = weight / ((height / 100) * (height / 100));
             return Bmi;
@@ -36,7 +36,7 @@ namespace refactorcalc
             user1.Height = BasicOperation.inputNumber1();
             Console.WriteLine("Weight, in kg");
             user1.Weight = BasicOperation.inputNumber1();
-            user1.Bmi = calculateBMI(user1.Weight, user1.Height);
+            user1.Bmi = user1.calculateBMI(user1.Weight, user1.Height);
             Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", user1.Name, user1.Weight, user1.Height, user1.Bmi);
             return user1;
         }
@@ -64,7 +64,7 @@ namespace refactorcalc
                 {
                     Console.WriteLine("User found. Please enter your new weight:");
                     test.Weight = BasicOperation.inputNumber1();
-                    test.Bmi = calculateBMI(test.Weight, test.Height);
+                    test.Bmi = test.calculateBMI(test.Weight, test.Height);
                     Console.WriteLine("Name {0}\nWeight {1}\nHeight {2}\nBMI {3:N02}\n", test.Name, test.Weight, test.Height, test.Bmi);
                 }
                 else
