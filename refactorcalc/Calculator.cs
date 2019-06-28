@@ -11,8 +11,12 @@ namespace refactorcalc
         static BasicOperation result;
         public static void startCalculator()
         {
-            MainMenu.startMenu();
-            //MainMenu.calculateObjectFromMenu(result);
+            while (!false)
+            {
+                result = MainMenu.startMenu();
+                if (result != null)
+                    MainMenu.calculateObjectFromMenu(result);
+            }
             //Calculator.SetInputsForMathOperation(operation);
             //BasicOperation.SetInputsForMathOperation(operation);
             //operation.Calculate();   //беру объект, считаю результат
