@@ -124,7 +124,6 @@ namespace refactorcalc
         public int Rows { get; set; }
         public int Columns { get; set; }
 
-        public List<double[,]> matrixResults;
         public Matrix(int rows, int columns, double[,] v)
         {
             this.Rows = rows;

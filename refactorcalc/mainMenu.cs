@@ -8,7 +8,12 @@ namespace refactorcalc
 {
     class MainMenu
     {
-        public static BasicOperation startMenu()
+        public static void calculateObjectFromMenu(BasicOperation result)
+        {
+            result.SetInputsForMathOperation(result);
+            result.Calculate();
+        }
+        public static void startMenu()
         {
             bool exit = false;
             BasicOperation result = null;
@@ -18,24 +23,22 @@ namespace refactorcalc
                 string operation = Console.ReadLine();
                 switch (operation)
                 {
-                    case ("q"):
-                        Environment.Exit(0);
-                        break;
                     case ("+"):
                         result = new CalculatorSum();
-                        //result.Calculate();
+                        //calculateObjectFromMenu(result);
                         break;
                     case ("-"):
                         result = new CalculatorSub();
-                        //result.Calculate();
+                        //result.SetInputsForMathOperation(result);
+                        //calculateObjectFromMenu(result);
                         break;
                     case ("*"):
                         result = new CalculatorMultiply();
-                        //result.Calculate();
+                        //calculateObjectFromMenu(result);
                         break;
                     case ("/"):
                         result = new CalculatorDivision();
-                        //result.Calculate();
+                        //calculateObjectFromMenu(result);
                         break;
                     case ("m"):
                         MatrixMultiply.matrixMultiply();
@@ -49,13 +52,14 @@ namespace refactorcalc
                     case ("H"):
                         BasicOperation.operationsHistory();
                         break;
+                    case ("q"):
+                        Environment.Exit(0);
+                        break;
                     default:
                         Console.WriteLine("Please input one of the following symbols: q + - * / m b h H\n");
                         break;
                 }
-                return result;
             }
-            return result;
         }
     }
 }

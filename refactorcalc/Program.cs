@@ -11,20 +11,17 @@ namespace refactorcalc
         public static List<double[,]> matrixResults = new List<double[,]>();
         public static List<History> log = new List<History>();
         public double A;
-        public string operand;
         public double B;
         public double Result;
         public bool useLastResultCalc;
-        public BasicOperation basicOperation;
-
 
         public virtual void Calculate()
         {
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            A = inputNumber();
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            B = inputNumber();
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            //Console.ForegroundColor = ConsoleColor.Magenta;
+            //A = inputNumber();
+            //Console.ForegroundColor = ConsoleColor.Magenta;
+            //B = inputNumber();
+            //Console.ForegroundColor = ConsoleColor.Magenta;
         }
 
         public static void operationsHistory()
@@ -64,7 +61,7 @@ namespace refactorcalc
             }
             return true;
         }
-        public static void SetInputsForMathOperation(BasicOperation operation)
+        public void SetInputsForMathOperation(BasicOperation operation)
         {
             double input_1;
             double input_2;
@@ -336,7 +333,7 @@ namespace refactorcalc
         public string Operand;
         public double B;// { get; set; }
         public double Result;
-        public List<string> history;
+
         public History(double a, string operand, double b, double result) //конструктор
         {
             A = a;
@@ -347,7 +344,7 @@ namespace refactorcalc
 
         public void addLog(string record)
         {
-            history.Add(record);
+            //history.Add(record);
         }
     }
 

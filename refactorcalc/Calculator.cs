@@ -8,15 +8,16 @@ namespace refactorcalc
 {
     class Calculator
     {
-        public static BasicOperation startCalculator()
+        static BasicOperation result;
+        public static void startCalculator()
         {
-            Calculator calculator = new Calculator();
-            BasicOperation operation = MainMenu.startMenu();
+            MainMenu.startMenu();
+            //MainMenu.calculateObjectFromMenu(result);
             //Calculator.SetInputsForMathOperation(operation);
-            BasicOperation.SetInputsForMathOperation(operation);
-            operation.Calculate();   //беру объект, считаю результат
-            operation.LastResult = operation.Result;
-            return operation;
+            //BasicOperation.SetInputsForMathOperation(operation);
+            //operation.Calculate();   //беру объект, считаю результат
+            //operation.LastResult = operation.Result;
+            //return operation;
         }
 
 
