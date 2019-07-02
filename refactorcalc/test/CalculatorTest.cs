@@ -40,18 +40,32 @@ namespace refactorcalc
             vasyan = new User();
         }
 
-        [Test, TestCaseSource("BMIData")]
+        [Test, TestCaseSource("BmiCalculations")]
         public void calculateBMITest(double weight, double height,   double result)
         {
             Assert.That(vasyan.calculateBMI(weight,height), Is.EqualTo(result).Within(0.01));
         }
 
         [Test, TestCaseSource("BMIData")]
-        public void inputNewUserDataTest(string name)
+        public void inputNewUserDataTest(string name, double weight, double height, double result)
         {
+            User user = new User();
+            user.Name = name;
+            user.Weight = weight;
+            user.Height = height;
+            
             //Assert.That(, Is.EqualTo(result).Within(0.01));
         }
         static object[] BMIData = 
+            {
+            new object[] {"test",55,150,24.44},
+            new object[] {"test",74,180,22.84},
+            new object[] {"test",85,150,37.78},
+            new object[] {"test",70,170,24.22}
+
+        //new double{{1,2,3}}
+    };
+        static object[] BmiCalculations =
             {
             new object[] {55,150,24.44},
             new object[] {74,180,22.84},
@@ -148,13 +162,13 @@ namespace refactorcalc
             };
     }
 
-    public class inputTest
-    {
-        [Test]
-        public void validInputTest()
-        {
+    //public class inputTest
+    //{
+    //    [Test]
+    //    public void validInputTest()
+    //    {
 
-        }
-    }
+    //    }
+    //}
 
 }
