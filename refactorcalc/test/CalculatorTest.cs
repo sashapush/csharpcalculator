@@ -41,22 +41,25 @@ namespace refactorcalc
         }
 
         [Test, TestCaseSource("BMIData")]
-        public void calculateBMITest(double weight, double height, double result)
+        public void calculateBMITest(double weight, double height,   double result)
         {
-            Assert.AreEqual(vasyan.calculateBMI(weight, height), result);
+            Assert.That(vasyan.calculateBMI(weight,height), Is.EqualTo(result).Within(0.01));
         }
-        static User[] BMIData =
+
+        [Test, TestCaseSource("BMIData")]
+        public void inputNewUserDataTest(string name)
         {
-            new User()
+            //Assert.That(, Is.EqualTo(result).Within(0.01));
+        }
+        static object[] BMIData = 
             {
-                Weight=70,
-                Height=180,
-                Bmi=24.5
-            }
-            //new double{{1,2,3}}
-        };
+            new object[] {55,150,24.44},
+            new object[] {74,180,22.84},
+            new object[] {85,150,37.78},
+            new object[] {70,170,24.22}
 
-
+        //new double{{1,2,3}}
+    };
     }
 
     public class CalculatorOperations
@@ -69,7 +72,6 @@ namespace refactorcalc
             basicOperation.B = b;
             basicOperation.Calculate();
             Assert.AreEqual(basicOperation.Result, result);
-
         }
         [Test, TestCaseSource("calcSub")]
         public void calculatorSubTest(double a, double b, double result)
@@ -78,7 +80,7 @@ namespace refactorcalc
             basicOperation.A = a;
             basicOperation.B = b;
             basicOperation.Calculate();
-            Assert.AreEqual(basicOperation.Result, result);
+            Assert.That(basicOperation.Result, Is.EqualTo(result).Within(0.01)); 
 }
         [Test, TestCaseSource("calcMultiply")]
         public void calculatorMutliplyTest(double a, double b, double result)
@@ -93,11 +95,12 @@ namespace refactorcalc
         [Test, TestCaseSource("calcDivision")]
         public void calcDivisionTest(double a, double b, double result)
         {
-            CalculatorMultiply basicOperation = new CalculatorMultiply();
+            CalculatorDivision basicOperation = new CalculatorDivision();
             basicOperation.A = a;
             basicOperation.B = b;
             basicOperation.Calculate();
-            Assert.AreEqual(basicOperation.Result, result);
+            Assert.That(basicOperation.Result, Is.EqualTo(result).Within(0.01));
+            //Assert.AreEqual(basicOperation.Result, result);
 
         }
         static object[] calcSub =
@@ -125,9 +128,9 @@ namespace refactorcalc
             {
             new object[] {1,2,0.5},
             new object[] {2,1,2},
-            new object[] {2,4,6},
+            new object[] {2,4,0.5},
             new object[] {0,1,0},
-            new object[] {0,0,null},
+            //new object[] {0,0,"NaN"}, 0 can't be used by input method.
             new object[] {-99,-1,99},
             new object[] {0.1,-0.1,-1},
             new object[] {10.5,10.6,0.99}
@@ -141,7 +144,7 @@ namespace refactorcalc
             new object[] {0,0,0},
             new object[] {-99,-1,99},
             new object[] {0.1,-0.1,-0.01},
-            new object[] {-145545.56,0.99,-144090.10}
+            new object[] {-145545.56,0.99,-144090.1044}
             };
     }
 

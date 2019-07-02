@@ -195,7 +195,7 @@ namespace refactorcalc
             A = log.Select(l => l.Result).ToList().Last();   // https://stackoverflow.com/questions/8587872/how-to-get-only-specific-field-from-the-list 
             Console.WriteLine("You're performing SUBSTRACT operation with the following value: {0}", A);
             B = inputNumber();
-            DisplayResultAndLogHistory(A, B);
+            
         }
         protected void DisplayResultAndLogHistory(double a, double b)
         {
@@ -241,7 +241,7 @@ namespace refactorcalc
         {
             Result = a * b;
             Console.WriteLine("{0}*{1}={2}\n", a, b, Result);
-            log.Add(new History(a, "*", b, Result));
+            log.Add(new History(a,"*",b, Result));
         }
         public override void Calculate()
         {
@@ -304,26 +304,28 @@ namespace refactorcalc
         }
         public override void Calculate()
         {
-            if (log.Count > 0)
-            {
-                Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
-                var answer = Console.ReadLine();
-                if (answer == "y")
-                {
-                    useLastResult();
-                }
-                else
-                {
-                    base.Calculate();
-                    DisplayResultAndLogHistory(A, B);
-                }
-            }
-            else if (log.Count == 0)
-            {
-                A = base.inputNumber();
-                B = inputNumber();
-                DisplayResultAndLogHistory(A, B);
-            }
+            //if (log.Count > 0)
+            //{
+            //    Console.WriteLine("Would you like to use history?\nPress \"y\" to use last inputed value. Or any other key to continue the calculation");
+            //    var answer = Console.ReadLine();
+            //    if (answer == "y")
+            //    {
+            //        useLastResult();
+            //    }
+            //    else
+            //    {
+            //        base.Calculate();
+            //        DisplayResultAndLogHistory(A, B);
+            //    }
+            //}
+            //else if (log.Count == 0)
+            //{
+            //    A = base.inputNumber();
+            //    B = inputNumber();
+            //    DisplayResultAndLogHistory(A, B);
+            //}
+            Result = A / B;
+            Console.WriteLine("{0}/{1}={2}\n", A, B, Result);
         }
     }
 
@@ -342,7 +344,7 @@ namespace refactorcalc
             Result = result;
         }
 
-        public void addLog(string record)
+        public void AddLog(string record)
         {
             //history.Add(record);
         }
