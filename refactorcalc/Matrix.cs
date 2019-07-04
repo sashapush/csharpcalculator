@@ -8,6 +8,7 @@ namespace refactorcalc
 {
     class MatrixMultiply : BasicOperation
     {
+        public static List<double[,]> matrixResults = new List<double[,]>();
         private static int defineMatrixSize()
         {
             string presize = Console.ReadLine();
@@ -72,68 +73,80 @@ namespace refactorcalc
                 }
             }
         }
+
+        private static void inputMatrix(ref int n, ref int m, ref double [,] matrix1)
+        {
+            Console.WriteLine("Please define how many rows your 1st matrix has.\nOnly whole numbers >0 are allowed");
+            n = defineMatrixSize();
+            Console.WriteLine("Please define how many columns your 1st matrix has.\nOnly whole numbers >0 are allowed");
+            m = defineMatrixSize();
+            matrix1 = new double[n, m];
+            Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * m);
+            fillMatrixWithInput(n, m, matrix1);
+            //return matrix1;
+        }
         public static void matrixMultiply()
         {
+            int n = 0;  //first matrix rows #
+            int m = 0;  //first matrix columns #
+            double[,] matrix1=null;
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Please define how many rows your 1st matrix has.\nOnly whole numbers >0 are allowed");
-            int n = defineMatrixSize();
-            Console.WriteLine("Please define how many columns your 1st matrix has.\nOnly whole numbers >0 are allowed");
-            int m = defineMatrixSize();
-            double[,] matrix1 = new double[n, m];
-            Console.WriteLine("Please define how many rows your 2nd matrix has.\nIt should be equal to *{0}* for valid multiplication", m);
-            int x = defineMatrixSize();
-            while (m != x)
+            if (matrixResults.Count > 0)
             {
-                Console.WriteLine("Can't multiply, please make sure 2nd matrix has {0} rows", m);
-                x = defineMatrixSize();
+                Console.WriteLine("Press \"y\" to use result of previous matrix caclulation");
+                var input = Console.ReadLine();
+                switch (input) {
+                    case "y":
+                        matrix1 = matrixResults[matrixResults.Count - 1];
+                        n = matrix1.GetLength(0);
+                        //matrix4.Rank;
+                        m = matrix1.GetLength(1);
+                        Console.WriteLine("Using the following matrix:");
+                        displayMatrix(n, m, matrix1);
+                        break;
+                    default:
+                        inputMatrix(ref n, ref m, ref matrix1);
+                        break;
+                }
             }
+            else {
+                inputMatrix(ref n, ref m, ref matrix1);
+                //Console.WriteLine("Please define how many rows your 1st matrix has.\nOnly whole numbers >0 are allowed");
+                //n = defineMatrixSize();
+                //Console.WriteLine("Please define how many columns your 1st matrix has.\nOnly whole numbers >0 are allowed");
+                //m = defineMatrixSize();
+                //matrix1 = new double[n, m];
+                //Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * m);
+                //fillMatrixWithInput(n, m, matrix1);
+            }
+            int x = matrix1.GetLength(1);
+            Console.WriteLine("Your 2nd matrix has *{0}* rows for valid multiplication", m);
             Console.WriteLine("Please define how many columns your 2nd matrix has.\nOnly whole numbers >0 are allowed");
             int y = defineMatrixSize();
             double[,] matrix2 = new double[x, y];
-            //https://www.tutorialspoint.com/chash-program-to-multiply-two-matrices
             double[,] matrixMultiplyResult = new double[n, y];
-            Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * m);
-            fillMatrixWithInput(n, m, matrix1);
             Console.Write("Enter {0} elements of the second matrix, separated by ENTER:\n", x * y);
             fillMatrixWithInput(x, y, matrix2);
             Console.Write("\nFirst matrix is:");
-            displayMatrix(n, m, matrix1);
+            displayMatrix(n,m,matrix1);
             Console.Write("\nSecond matrix is:");
-            displayMatrix(x, y, matrix2);
-            calcualteMatrixMultiplicationResult(n, y, m, matrix1, matrix2, matrixMultiplyResult);
+            displayMatrix(x,y,matrix2);
+            calcualteMatrixMultiplicationResult(n, y, m, matrix1, matrix2, matrixMultiplyResult); ////////https://www.tutorialspoint.com/chash-program-to-multiply-two-matrices
             Console.Write("\nMatrixes multiplication result is: ");
             displayMatrix(n, y, matrixMultiplyResult);
             matrixResults.Add(matrixMultiplyResult);
-            //////////////////matrix = new Matrix(n, y, matrixMultiplyResult); //////////////////////////////////////////////
-            Console.WriteLine("Please define how many rows your 2nd matrix has.\nIt should be equal to *{0}* for valid multiplication", m);
-            x = defineMatrixSize();
-            while (n != x)
-            {
-                Console.WriteLine("Can't multiply, please make sure 2nd matrix has {0} rows", n);
-                x = defineMatrixSize();
             }
-            Console.WriteLine("Please define how many columns your 2nd matrix has.\nOnly whole numbers >0 are allowed");
-            y = defineMatrixSize();
-            double[,] matrix3 = new double[x, y];
-            calcualteMatrixMultiplicationResult(n, y, m, matrixMultiplyResult, matrix3, matrixMultiplyResult);
-        }
     }
     class Matrix
     {
-        public double[,] V { get; set; }
+        public double[,] matrix { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
 
-        public Matrix(int rows, int columns, double[,] v)
-        {
-            this.Rows = rows;
-            this.Columns = columns;
-            this.V = v;
-        }
-        public Matrix()
-        {
 
+        public Matrix(double[,] v)
+        {
+            this.matrix = v;
         }
-
     }
 }

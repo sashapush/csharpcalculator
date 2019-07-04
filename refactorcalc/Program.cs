@@ -8,7 +8,6 @@ namespace refactorcalc
     abstract class BasicOperation
     {
         public double LastResult { get; set; }
-        public static List<double[,]> matrixResults = new List<double[,]>();
         public static List<History> log = new List<History>();
         public double A;
         public double B;

@@ -46,14 +46,13 @@ namespace refactorcalc
             Assert.That(vasyan.calculateBMI(weight,height), Is.EqualTo(result).Within(0.01));
         }
 
-        [Test, TestCaseSource("BMIData")]
+        [Test, TestCaseSource("BMIData")] //to do;
         public void inputNewUserDataTest(string name, double weight, double height, double result)
         {
             User user = new User();
             user.Name = name;
             user.Weight = weight;
             user.Height = height;
-            
             //Assert.That(, Is.EqualTo(result).Within(0.01));
         }
         static object[] BMIData = 
@@ -103,7 +102,7 @@ namespace refactorcalc
             basicOperation.A = a;
             basicOperation.B = b;
             basicOperation.Calculate();
-            Assert.AreEqual(basicOperation.Result, result);
+            Assert.That(basicOperation.Result, Is.EqualTo(result).Within(0.01));
 
         }
         [Test, TestCaseSource("calcDivision")]
@@ -120,7 +119,7 @@ namespace refactorcalc
         static object[] calcSub =
             {
             new object[] {2,1,1},
-            new object[] {99999.9,55555.5,44444.41},
+            new object[] {99999.9,55555.5,44444.4},
             new object[] {0,1,-1},
             new object[] {0.1,1,-0.9},
             new object[] {0,0,0},
@@ -170,5 +169,17 @@ namespace refactorcalc
 
     //    }
     //}
+    public class MatrixTests
+    {
 
+    
+    [Test, TestCaseSource("calcDivision")]
+    public void MatrixValidInputs()
+    {
+        //Matrix.fillMatrixWithInput();
+        //Assert.AreEqual(basicOperation.Result, result);
+
+        }
+    }
 }
+
