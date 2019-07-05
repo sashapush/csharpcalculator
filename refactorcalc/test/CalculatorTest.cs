@@ -16,7 +16,12 @@ namespace refactorcalc
                     Assert.False(BasicOperation.isValidNumber(input), $"{input} is not valid input");
         //Assert.True(BasicOperation.isValidNumber("1"), "1 is valid input");
 
-        [Test]
+        [Test, TestCaseSource("inValidNumbers")]
+        public void isValidNumberWhole(string input) =>
+                Assert.False(BasicOperation.isValidNumber(input), $"{input} is not valid input");
+
+        isValidNumberWhole
+    [Test]
         public void isValidNumberWholeTest()
         {
             Assert.False(BasicOperation.isValidNumberWhole("1.5"), "$a is not a whole number");
@@ -41,21 +46,21 @@ namespace refactorcalc
         }
 
         [Test, TestCaseSource("BmiCalculations")]
-        public void calculateBMITest(double weight, double height,   double result)
+        public void calculateBMITest(double weight, double height, double result)
         {
-            Assert.That(vasyan.calculateBMI(weight,height), Is.EqualTo(result).Within(0.01));
+            Assert.That(vasyan.calculateBMI(weight, height), Is.EqualTo(result).Within(0.01));
         }
 
         [Test, TestCaseSource("BMIData")] //to do;
         public void inputNewUserDataTest(string name, double weight, double height, double result)
         {
-            User user = new User();
+            var user = new User();
             user.Name = name;
             user.Weight = weight;
             user.Height = height;
             //Assert.That(, Is.EqualTo(result).Within(0.01));
         }
-        static object[] BMIData = 
+        static object[] BMIData =
             {
             new object[] {"test",55,150,24.44},
             new object[] {"test",74,180,22.84},
@@ -80,7 +85,7 @@ namespace refactorcalc
         [Test, TestCaseSource("calcSum")]
         public void calculatorSumTest(double a, double b, double result)
         {
-            CalculatorSum basicOperation = new CalculatorSum();
+            var basicOperation = new CalculatorSum();
             basicOperation.A = a;
             basicOperation.B = b;
             basicOperation.Calculate();
@@ -89,16 +94,16 @@ namespace refactorcalc
         [Test, TestCaseSource("calcSub")]
         public void calculatorSubTest(double a, double b, double result)
         {
-            CalculatorSub basicOperation = new CalculatorSub();
+            var basicOperation = new CalculatorSub();
             basicOperation.A = a;
             basicOperation.B = b;
             basicOperation.Calculate();
-            Assert.That(basicOperation.Result, Is.EqualTo(result).Within(0.01)); 
-}
+            Assert.That(basicOperation.Result, Is.EqualTo(result).Within(0.01));
+        }
         [Test, TestCaseSource("calcMultiply")]
         public void calculatorMutliplyTest(double a, double b, double result)
         {
-            CalculatorMultiply basicOperation= new CalculatorMultiply();
+            CalculatorMultiply basicOperation = new CalculatorMultiply();
             basicOperation.A = a;
             basicOperation.B = b;
             basicOperation.Calculate();
@@ -108,7 +113,7 @@ namespace refactorcalc
         [Test, TestCaseSource("calcDivision")]
         public void calcDivisionTest(double a, double b, double result)
         {
-            CalculatorDivision basicOperation = new CalculatorDivision();
+            var basicOperation = new CalculatorDivision();
             basicOperation.A = a;
             basicOperation.B = b;
             basicOperation.Calculate();
@@ -161,25 +166,34 @@ namespace refactorcalc
             };
     }
 
-    //public class inputTest
-    //{
-    //    [Test]
-    //    public void validInputTest()
-    //    {
-
-    //    }
-    //}
     public class MatrixTests
     {
 
-    
-    [Test, TestCaseSource("calcDivision")]
-    public void MatrixValidInputs()
-    {
-        //Matrix.fillMatrixWithInput();
-        //Assert.AreEqual(basicOperation.Result, result);
 
+        //[Test, TestCaseSource("calcDivision")]
+        //public void MatrixValidInputs()
+        //{
+        //    //Matrix.fillMatrixWithInput();
+        //    //Assert.AreEqual(basicOperation.Result, result);
+
+        //}
+        [Test, TestCaseSource("validMatrixSize")]
+        public void MatrixSizePositiveTest(string a,int b)
+        {
+            Assert.AreEqual(MatrixMultiply.defineMatrixSize(a),b);
         }
+        //[Test, TestCaseSource("invalidMatrixSize")]
+        //public void MatrixSizeNegativeTest(string a)
+        //{
+        //    Assert.Fail("invalid data detected - can't define matrix size by \"{0}\" ",a,MatrixMultiply.defineMatrixSize(a));
+        //}
+        static string[] invalidMatrixSize = new string[] { "0", "-1", "-100000", "1.5", "0.12", "-0.12", "aaaa","%$","select * from credit c where c.id in"};
+        static object[] validMatrixSize =
+            {
+            new object[] {"1",1},
+            new object[] {"2",2},
+            new object[] {"100",100}
+            };
     }
 }
 

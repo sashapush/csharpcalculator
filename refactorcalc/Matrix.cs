@@ -9,9 +9,10 @@ namespace refactorcalc
     class MatrixMultiply : BasicOperation
     {
         public static List<double[,]> matrixResults = new List<double[,]>();
-        private static int defineMatrixSize()
+        public static int defineMatrixSize(string presize=null)
         {
-            string presize = Console.ReadLine();
+            if (presize==null)
+            { presize = Console.ReadLine(); }
             int x;  // Needed to work with int.TryParse
             while (!isValidNumberWhole(presize) || Convert.ToInt32(presize) < 1)
             {
@@ -111,13 +112,6 @@ namespace refactorcalc
             }
             else {
                 inputMatrix(ref n, ref m, ref matrix1);
-                //Console.WriteLine("Please define how many rows your 1st matrix has.\nOnly whole numbers >0 are allowed");
-                //n = defineMatrixSize();
-                //Console.WriteLine("Please define how many columns your 1st matrix has.\nOnly whole numbers >0 are allowed");
-                //m = defineMatrixSize();
-                //matrix1 = new double[n, m];
-                //Console.Write("Enter {0} elements of the first matrix, separated by ENTER\n", n * m);
-                //fillMatrixWithInput(n, m, matrix1);
             }
             int x = matrix1.GetLength(1);
             Console.WriteLine("Your 2nd matrix has *{0}* rows for valid multiplication", m);
