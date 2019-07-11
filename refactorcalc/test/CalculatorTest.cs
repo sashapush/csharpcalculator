@@ -20,8 +20,7 @@ namespace refactorcalc
         public void isValidNumberWhole(string input) =>
                 Assert.False(BasicOperation.isValidNumber(input), $"{input} is not valid input");
 
-        isValidNumberWhole
-    [Test]
+      
         public void isValidNumberWholeTest()
         {
             Assert.False(BasicOperation.isValidNumberWhole("1.5"), "$a is not a whole number");
